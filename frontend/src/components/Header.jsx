@@ -1,45 +1,79 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagicWandSparkles, faShoppingBasket} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faLeaf,
+    faShoppingBasket,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
-    const navLinkClass = `text-center text-lg font-primary font-semibold text-primary py-2`;
+    const navLinkClass = `
+        font-primary
+        text-base
+        font-semibold
+        text-primary
+        transition-colors
+        duration-300
+        hover:text-dark
+    `;
 
     return (
-        <header className="border-b border-gray-300 sticky top-0 z-20 bg-white">
-            <div className="flex items-center justify-between max-w-6xl px-6 py-4 mx-auto">
-                <a href="/" className="link">
+        <header className="sticky top-0 z-20 bg-light/90 backdrop-blur-md border-b border-stone-200">
+            <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
+
+                <a
+                    href="/"
+                    className="flex items-center gap-2 transition-opacity duration-300 hover:opacity-80"
+                >
                     <FontAwesomeIcon
-                        icon={faMagicWandSparkles}
-                        className="text-primary h-8 w-8"
+                        icon={faLeaf}
+                        className="text-primary text-xl"
                     />
-                    <span className="text-lg font-primary font-semibold text-primary py-2">
+
+                    <span className="font-primary text-2xl font-bold text-primary tracking-wide">
                         Aura Cosmetics
                     </span>
                 </a>
-                <nav className="flex items-center py-2 z-10">
-                    <ul className="flex space-x-6">
+
+                <nav>
+                    <ul className="flex items-center gap-8">
+
                         <li>
-                            <a href="/" className={navLinkClass}>Home</a>
-                        </li>
-                        <li>
-                            <a href="/about" className={navLinkClass}>About</a>
-                        </li>
-                        <li>
-                            <a href="/contact" className={navLinkClass}>Contact</a>
-                        </li>
-                        <li>
-                            <a href="/login" className={navLinkClass}>Login</a>
-                        </li>
-                        <li>
-                            <a href="/cart" className={navLinkClass}>
-                                <FontAwesomeIcon icon={faShoppingBasket}/>
+                            <a href="/" className={navLinkClass}>
+                                Home
                             </a>
                         </li>
+
+                        <li>
+                            <a href="/about" className={navLinkClass}>
+                                About
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/contact" className={navLinkClass}>
+                                Contact
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/login" className={navLinkClass}>
+                                Login
+                            </a>
+                        </li>
+
+                        <li>
+                            <a
+                                href="/cart"
+                                className={`${navLinkClass} text-lg`}
+                            >
+                                <FontAwesomeIcon icon={faShoppingBasket} />
+                            </a>
+                        </li>
+
                     </ul>
                 </nav>
             </div>
         </header>
     );
-}
+};
 
 export default Header;

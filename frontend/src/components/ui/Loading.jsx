@@ -2,10 +2,14 @@ import { FaSpinner } from "react-icons/fa";
 
 const Loading = () => {
     return (
-        <div className="flex justify-center items-center gap-2 py-10">
-            <FaSpinner className="animate-spin text-pink-500 text-2xl" />
-            <span>Loading...</span>
+        <div className="flex flex-col items-center justify-center py-16 font-primary">
+            <FaSpinner className="animate-spin text-4xl text-primary mb-4" />
+
+            <p className="text-dark font-medium">
+                Loading products...
+            </p>
         </div>
     );
-}
+};
+
 export default Loading;

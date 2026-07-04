@@ -1,22 +1,70 @@
 import Price from "./Price";
 
-export default function ProductCard({product}) {
+export default function ProductCard({ product }) {
     return (
-        <div className="w-72 rounded-md mx-auto border border-gray-300 shadow-md overflow-hidden flex
-        flex-col bg-white hover:shadow-lg transition">
-            <div className="relative w-full h-72 border-b border-gray-300">
+        <div
+            className="
+                group
+                mx-auto
+                w-72
+                overflow-hidden
+                rounded-2xl
+                border
+                border-stone-200
+                bg-white
+                shadow-sm
+                transition-all
+                duration-300
+                hover:-translate-y-1
+                hover:shadow-xl
+            "
+        >
+            <div className="relative h-72 overflow-hidden">
                 <img
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     src={product.imageUrl}
-                    alt={product.name}/>
+                    alt={product.name}
+                    className="
+                        h-full
+                        w-full
+                        object-cover
+                        transition-transform
+                        duration-500
+                        group-hover:scale-105
+                    "
+                />
             </div>
-            <div className="relative h-48 p-4 flex flex-col font-primary">
-                <h2 className="text-xl font-semibold text-primary mb-2">{product.name}</h2>
-                <p className="text-base text-gray-600 mb-4">{product.description}</p>
-                <div className="flex items-center justify-between mt-auto">
-                    <div className="flex items-center justify-between mt-auto">
-                        <Price currency="$" price={product.price}/>
-                    </div>
+
+            <div className="flex h-52 flex-col p-5 font-primary">
+                <h2 className="mb-2 text-xl font-bold text-dark">
+                    {product.name}
+                </h2>
+
+                <p className="mb-5 line-clamp-3 text-sm leading-6 text-stone-600">
+                    {product.description}
+                </p>
+
+                <div className="mt-auto flex items-center justify-between">
+                    <Price
+                        currency="$"
+                        price={product.price}
+                    />
+
+                    <button
+                        className="
+                            rounded-lg
+                            bg-primary
+                            px-4
+                            py-2
+                            text-sm
+                            font-semibold
+                            text-white
+                            transition
+                            duration-300
+                            hover:bg-dark
+                        "
+                    >
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>

@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
+
+import productService from "../api/product.service";
+
+import ErrorMessage from "./ui/ErrorMessage";
+import Loading from "./ui/Loading";
+
 import PageHeading from "./PageHeading";
 import ProductListings from "./ProductListings";
-import productService from "../api/product.service";
-import {useEffect, useState} from "react";
-import Loading from "./ui/Loading";
-import ErrorMessage from "./ui/ErrorMessage";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
@@ -13,39 +16,52 @@ export default function Home() {
     const fetchProducts = async () => {
         setLoading(true);
         setError(null);
+
         try {
             const response = await productService.getAll();
             setProducts(response.data);
         } catch (error) {
-            setError(error.response?.data?.message ?? "Failed to fetch products. Please try again.");
+            setError(
+                error.response?.data?.message ??
+                "Failed to fetch products. Please try again."
+            );
             console.error(error);
-        }finally {
+        } finally {
             setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         fetchProducts();
     }, []);
 
     if (loading) {
-        return (<Loading />);
+        return <Loading />;
     }
-    
+
     if (error) {
-        return (
-           <ErrorMessage message={error} />
-        );
+        return <ErrorMessage message={error} />;
     }
+
     return (
-        <div className="max-w-6xl mx-auto px-6 py-8">
+        <main
+            className="
+                rounded-3xl
+                bg-light
+                px-8
+                py-12
+                shadow-sm
+            "
+        >
             <PageHeading title="Aura Beauty Cosmetics">
-                <p className="text-center max-w-xl mx-auto px-4 py-6">
-                    Luxury skincare that nourishes your skin from within, designed for
-                    radiant beauty and lasting results.
+                <p className="mx-auto mt-4 max-w-2xl text-center font-primary text-lg leading-8 text-stone-600">
+                    Discover luxury skincare crafted with natural ingredients,
+                    designed to nourish your skin and reveal healthy, radiant
+                    beauty every day.
                 </p>
             </PageHeading>
-            <ProductListings products={products}/>
-        </div>
+
+            <ProductListings products={products} />
+        </main>
     );
 }
