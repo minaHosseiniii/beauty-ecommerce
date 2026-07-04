@@ -1,7 +1,6 @@
-package com.example.cosmeticstore.service;
+package com.example.beautyecommerce.service;
 
-import com.example.cosmeticstore.dto.ProductDTO;
-import com.example.cosmeticstore.entity.Product;
+import com.example.beautyecommerce.dto.ProductDTO;
 
 import java.util.List;
 

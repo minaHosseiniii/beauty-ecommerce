@@ -1,4 +1,4 @@
-package com.example.cosmeticstore.configuration;
+package com.example.beautyecommerce.configuration;
 
 
 import org.springframework.context.annotation.Bean;

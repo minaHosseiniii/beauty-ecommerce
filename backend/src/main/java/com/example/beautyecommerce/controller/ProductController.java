@@ -1,7 +1,7 @@
-package com.example.cosmeticstore.controller;
+package com.example.beautyecommerce.controller;
 
-import com.example.cosmeticstore.dto.ProductDTO;
-import com.example.cosmeticstore.service.ProductService;
+import com.example.beautyecommerce.dto.ProductDTO;
+import com.example.beautyecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

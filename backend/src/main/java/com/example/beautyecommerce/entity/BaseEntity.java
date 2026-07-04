@@ -1,4 +1,4 @@
-package com.example.cosmeticstore.entity;
+package com.example.beautyecommerce.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

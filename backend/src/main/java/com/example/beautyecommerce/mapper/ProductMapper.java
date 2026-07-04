@@ -1,7 +1,7 @@
-package com.example.cosmeticstore.mapper;
+package com.example.beautyecommerce.mapper;
 
-import com.example.cosmeticstore.dto.ProductDTO;
-import com.example.cosmeticstore.entity.Product;
+import com.example.beautyecommerce.dto.ProductDTO;
+import com.example.beautyecommerce.entity.Product;
 import org.mapstruct.Mapper;
 
 import java.util.List;

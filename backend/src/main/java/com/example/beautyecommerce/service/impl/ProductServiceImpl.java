@@ -1,9 +1,9 @@
-package com.example.cosmeticstore.service.impl;
+package com.example.beautyecommerce.service.impl;
 
-import com.example.cosmeticstore.dto.ProductDTO;
-import com.example.cosmeticstore.mapper.ProductMapper;
-import com.example.cosmeticstore.repository.ProductRepository;
-import com.example.cosmeticstore.service.ProductService;
+import com.example.beautyecommerce.dto.ProductDTO;
+import com.example.beautyecommerce.mapper.ProductMapper;
+import com.example.beautyecommerce.repository.ProductRepository;
+import com.example.beautyecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

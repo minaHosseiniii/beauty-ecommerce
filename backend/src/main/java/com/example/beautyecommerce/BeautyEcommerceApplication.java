@@ -1,13 +1,13 @@
-package com.example.cosmeticstore;
+package com.example.beautyecommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CosmeticstoreApplication {
+public class BeautyEcommerceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CosmeticstoreApplication.class, args);
+		SpringApplication.run(BeautyEcommerceApplication.class, args);
 	}
 
 }
