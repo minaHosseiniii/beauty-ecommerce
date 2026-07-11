@@ -11,11 +11,13 @@ export default function Price({ currency, price }) {
                 border
                 border-primary/20
                 bg-white
+                dark:bg-[#171A16]
                 text-primary
                 font-bold
                 text-lg
-            "
-        >
+                transition-all
+                duration-300
+            ">
             <span className="text-sm">
                 {currency}
             </span>

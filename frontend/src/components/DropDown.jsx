@@ -1,48 +1,85 @@
-const DropDown = ({ label, options, selectedValue }) => {
+const DropDown = ({
+                      label,
+                      options,
+                      selectedValue,
+                      handleSort,
+                  }) => {
     return (
-        <div className="flex flex-1 items-center justify-end gap-4 font-primary">
-
+        <div
+            className="
+                flex
+                flex-col
+                sm:flex-row
+                sm:items-center
+                sm:justify-end
+                flex-1
+                gap-3
+                sm:gap-4
+                font-primary
+            "
+        >
             <label
                 htmlFor="sort"
-                className="whitespace-nowrap text-base font-semibold text-dark"
+                className="
+        whitespace-nowrap
+        text-base
+        font-semibold
+        text-dark
+        dark:text-[#E9E6DD]
+        transition-colors
+        duration-300
+    "
             >
                 {label}
             </label>
 
             <select
                 id="sort"
+                onChange={handleSort}
                 value={selectedValue}
                 className="
-                    w-52
-                    rounded-lg
-                    border
-                    border-stone-300
-                    bg-white
-                    px-4
-                    py-2.5
-                    text-sm
-                    text-dark
-                    shadow-sm
-                    transition-all
-                    duration-300
-                    hover:border-primary
-                    focus:border-primary
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-primary/25
-                    cursor-pointer
-                "
+        w-full
+        sm:w-52
+        rounded-lg
+        border
+        border-stone-300
+        dark:border-[#2B3328]
+        bg-white
+        dark:bg-[#171A16]
+        px-4
+        py-2.5
+        text-sm
+        text-dark
+        dark:text-[#E9E6DD]
+        shadow-sm
+        dark:shadow-black/20
+        transition-all
+        duration-300
+        hover:border-primary
+        dark:hover:border-primary
+        focus:border-primary
+        dark:focus:border-primary
+        focus:outline-none
+        focus:ring-2
+        focus:ring-primary/25
+        cursor-pointer
+    "
             >
                 {options.map((optionValue, index) => (
                     <option
                         key={index}
                         value={optionValue}
+                        className="
+                bg-white
+                text-dark
+                dark:bg-[#171A16]
+                dark:text-[#E9E6DD]
+            "
                     >
                         {optionValue}
                     </option>
                 ))}
             </select>
-
         </div>
     );
 };
