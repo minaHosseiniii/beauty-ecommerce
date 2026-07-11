@@ -1,6 +1,6 @@
-import ProductCard from "./ProductCard";
-import SearchBox from "./SearchBox";
-import DropDown from "./DropDown";
+import ProductCard from "./ProductCard.jsx";
+import SearchBox from "./SearchBox.jsx";
+import DropDown from "./DropDown.jsx";
 import {useMemo, useState} from "react";
 
 export default function ProductListings({products}) {

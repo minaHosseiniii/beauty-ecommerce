@@ -1,6 +1,7 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeaf, faMoon, faShoppingBasket, faSun} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
+import {Link, NavLink} from "react-router-dom";
 
 const Header = () => {
     const [theme, setTheme] = useState(() => {
@@ -22,6 +23,15 @@ const Header = () => {
     hover:text-dark
     dark:hover:text-primary
 `;
+
+    const getNavClass = ({isActive}) => `
+    ${navLinkClass}
+    px-2
+    py-1
+    transition-all
+    duration-300
+    ${isActive ? "text-primary border-b-2 border-primary font-bold": ""}
+    `;
 
     const toggleTheme = () => {
         const newTheme = theme === "dark"
@@ -62,8 +72,8 @@ const Header = () => {
 ">
             <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
 
-                <a
-                    href="/"
+                <NavLink
+                    to="/"
                     className="flex items-center gap-2 transition-opacity duration-300 hover:opacity-80">
                     <FontAwesomeIcon
                         icon={faLeaf}
@@ -72,7 +82,7 @@ const Header = () => {
                         className="font-primary text-2xl font-bold text-primary dark:text-stone-100 tracking-wide">
                         Aura Cosmetics
                     </span>
-                </a>
+                </NavLink>
 
                 <nav>
                     <ul className="flex items-center gap-8">
@@ -102,36 +112,36 @@ const Header = () => {
                         </li>
 
                         <li>
-                            <a href="/" className={navLinkClass}>
+                            <NavLink to="/" className={getNavClass}>
                                 Home
-                            </a>
+                            </NavLink>
                         </li>
 
                         <li>
-                            <a href="/about" className={navLinkClass}>
+                            <NavLink to="/about" className={getNavClass}>
                                 About
-                            </a>
+                            </NavLink>
                         </li>
 
                         <li>
-                            <a href="/contact" className={navLinkClass}>
+                            <NavLink to="/contact" className={getNavClass}>
                                 Contact
-                            </a>
+                            </NavLink>
                         </li>
 
                         <li>
-                            <a href="/login" className={navLinkClass}>
+                            <NavLink to="/login" className={getNavClass}>
                                 Login
-                            </a>
+                            </NavLink>
                         </li>
 
                         <li>
-                            <a
-                                href="/cart"
+                            <Link
+                                to="/cart"
                                 className={`${navLinkClass} text-lg`}
                             >
-                                <FontAwesomeIcon icon={faShoppingBasket}/>
-                            </a>
+                                <FontAwesomeIcon icon={faShoppingBasket} />
+                            </Link>
                         </li>
 
                     </ul>

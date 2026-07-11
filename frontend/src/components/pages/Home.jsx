@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
 
-import productService from "../api/product.service";
+import productService from "../../api/product.service.js";
 
-import ErrorMessage from "./ui/ErrorMessage";
-import Loading from "./ui/Loading";
+import ErrorMessage from "../ui/ErrorMessage.jsx";
+import Loading from "../ui/Loading.jsx";
 
-import PageHeading from "./PageHeading";
-import ProductListings from "./ProductListings";
+import PageHeading from "./PageHeading.jsx";
+import ProductListings from "./ProductListings.jsx";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
