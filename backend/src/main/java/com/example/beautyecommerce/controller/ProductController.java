@@ -5,9 +5,7 @@ import com.example.beautyecommerce.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +18,10 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getProducts() {
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
     }
 }
