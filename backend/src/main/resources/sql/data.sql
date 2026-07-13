@@ -1,89 +1,56 @@
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Developer', 'Code Wizard!', 5.00, 85, '/stickers/developer.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+DELETE FROM products;
+INSERT INTO products
+(name, description, price, popularity, image_url, created_by)
+VALUES
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Break', 'Hey, lets take a breather and start fresh on the next line', 4.50, 40, '/stickers/break.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Rose Hydrating Toner',
+     'Refreshing rose water toner that hydrates and balances skin.',
+     18.99, 95, 'images/rose-hydrating-toner.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Not a bug', 'It''s a surprise functionality.', 6.00, 98, '/stickers/itsnotabug.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Vitamin C Brightening Serum',
+     'Powerful serum that improves skin radiance and reduces dark spots.',
+     34.99, 100, 'images/vitamin-c-serum.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Devster', 'They exist!', 5.00, 72, '/stickers/EatSleepCode.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Hyaluronic Acid Serum',
+     'Deep hydration serum for soft and plump skin.',
+     29.99, 98, 'images/hyaluronic-serum.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('CodeSmasher', 'Fearless developer!', 7.50, 88, '/stickers/BreakingCode.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Aloe Vera Soothing Gel',
+     'Cooling gel that calms irritated and sensitive skin.',
+     16.99, 90, 'images/aloe-vera-gel.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('CodeMate', 'Without you, I''m incomplete!', 2.00, 79, '/stickers/youaremycss.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Green Tea Face Cleanser',
+     'Gentle cleanser infused with antioxidant green tea.',
+     22.99, 92, 'images/green-tea-cleanser.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Mbappé', 'Phenomenal!', 8.00, 55, '/stickers/Mbappe.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Charcoal Detox Mask',
+     'Purifying mask that removes excess oil and impurities.',
+     24.99, 88, 'images/charcoal-mask.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('AstroChill', 'Cool for gravity!', 3.00, 52, '/stickers/CoolAstraunaut.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Lavender Night Cream',
+     'Nourishing night cream enriched with calming lavender.',
+     32.99, 91, 'images/lavender-night-cream.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Ronaldo', 'Legendary!', 8.00, 100, '/stickers/ronaldo.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Collagen Anti-Aging Cream',
+     'Improves skin elasticity and reduces fine lines.',
+     39.99, 97, 'images/collagen-cream.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('My Driving Scares Me Too', 'They exist!', 5.00, 65, '/stickers/MyDrivingScaresMeToo.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Coconut Body Butter',
+     'Deep moisturizing body butter with coconut extracts.',
+     19.99, 85, 'images/coconut-body-butter.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Three headed dragon symbol', 'Targaryen dynasty strength', 9.00, 98, '/stickers/HouseOfTheDragonSymbol.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Shea Hand Cream',
+     'Rich hand cream that softens and protects dry hands.',
+     14.99, 83, 'images/shea-hand-cream.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Squid Game', 'Let''s play', 5.00, 70, '/stickers/SquidGame.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Argan Hair Oil',
+     'Lightweight oil that nourishes and adds shine to hair.',
+     26.99, 94, 'images/argan-hair-oil.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Shin-Chan', 'Mischievous!', 5.00, 70, '/stickers/Shinchan.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Keratin Repair Shampoo',
+     'Strengthening shampoo for damaged hair.',
+     21.99, 90, 'images/keratin-shampoo.jpg', 'system'),
 
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Game over', 'Game over!', 5.00, 50, '/stickers/GameOver.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Messi', 'Magical!', 10.00, 99, '/stickers/Messi.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Virat Kohli', 'King', 9.00, 99, '/stickers/Virat.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Lazy Cat', 'Not Today', 6.00, 60, '/stickers/LazyCat.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Busy Brain', 'Overthinker!', 4.00, 50, '/stickers/OverThinker.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Naruto', 'Ninja!', 6.00, 60, '/stickers/Naruto.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Goku', 'Warrior!', 6.00, 60, '/stickers/Goku.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('I am okay', 'Persistent!', 6.00, 60, '/stickers/IamOkay.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Boo', 'Disapproval!', 6.00, 60, '/stickers/Boo.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('EW feeling', 'Disgust!', 6.00, 60, '/stickers/EwFeelings.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Be wild', 'Unleashed!', 6.00, 60, '/stickers/BeWild.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('SummerCat', 'Heatwave Whiskers', 6.00, 60, '/stickers/AestheticSummerCat.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Savageness', 'Your opinion means nothing', 6.00, 60, '/stickers/YourOpinonMeansNothing.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Awkweird', 'Awkward and Weird', 6.00, 60, '/stickers/SociallyAwkward.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Blue Butterfly', 'Gracewing', 6.00, 60, '/stickers/Butterfly.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('NoHesitation', 'Always ready to take charge!', 6.00, 60, '/stickers/IWon_tHesitateSticker.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('Wardgaze', 'Protective power of the evil eye', 6.00, 60, '/stickers/EvilEye.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+    ('Keratin Repair Conditioner',
+     'Nourishing conditioner for silky and healthy hair.',
+     21.99, 88, 'images/keratin-conditioner.jpg', 'system');
