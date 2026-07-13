@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Price from "./Price.jsx";
 
 export default function ProductCard({ product }) {
@@ -23,46 +24,52 @@ export default function ProductCard({ product }) {
                 dark:hover:shadow-black/40
             "
         >
-            <div className="relative h-72 overflow-hidden">
-                <img
-                    src={product.imageUrl}
-                    alt={product.name}
-                    className="
-                        h-full
-                        w-full
-                        object-cover
-                        transition-transform
-                        duration-500
-                        group-hover:scale-105
-                    "
-                />
-            </div>
+            <Link to={`/products/${product.id}`}>
+                <div className="relative h-72 overflow-hidden">
+                    <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="
+                            h-full
+                            w-full
+                            object-cover
+                            transition-transform
+                            duration-500
+                            group-hover:scale-105
+                        "
+                    />
+                </div>
+            </Link>
 
             <div className="flex h-52 flex-col p-5 font-primary">
-                <h2
-                    className="
-        mb-2
-        text-xl
-        font-bold
-        text-dark
-        dark:text-[#E9E6DD]
-        transition-colors
-        duration-300
-    ">
-                    {product.name}
-                </h2>
+                <Link to={`/products/${product.id}`}>
+                    <h2
+                        className="
+                            mb-2
+                            text-xl
+                            font-bold
+                            text-dark
+                            dark:text-[#E9E6DD]
+                            transition-colors
+                            duration-300
+                        "
+                    >
+                        {product.name}
+                    </h2>
+                </Link>
 
                 <p
                     className="
-        mb-5
-        line-clamp-3
-        text-sm
-        leading-6
-        text-stone-600
-        dark:text-[#C8CCBF]
-        transition-colors
-        duration-300
-    ">
+                        mb-5
+                        line-clamp-3
+                        text-sm
+                        leading-6
+                        text-stone-600
+                        dark:text-[#C8CCBF]
+                        transition-colors
+                        duration-300
+                    "
+                >
                     {product.description}
                 </p>
 
@@ -74,19 +81,18 @@ export default function ProductCard({ product }) {
 
                     <button
                         className="
-        rounded-lg
-        bg-primary
-        px-4
-        py-2
-        text-sm
-        font-semibold
-        text-white
-        transition-all
-        duration-300
-        hover:bg-dark
-        dark:hover:bg-[#5D764C]
-        hover:shadow-md
-    ">
+                            rounded-lg
+                            bg-primary
+                            px-4
+                            py-2
+                            text-sm
+                            font-semibold
+                            text-white
+                            transition-all
+                            duration-300
+                            hover:bg-dark
+                            dark:hover:bg-[#5D764C]
+                            hover:shadow-md ">
                         Add to Cart
                     </button>
                 </div>

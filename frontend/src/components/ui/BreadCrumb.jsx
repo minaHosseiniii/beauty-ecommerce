@@ -1,7 +1,12 @@
-import {Link, useLocation} from "react-router-dom";
+import {
+    Link,
+    useLocation,
+    useMatches
+} from "react-router-dom";
 
 const BreadCrumb = () => {
     const location = useLocation();
+    const matches = useMatches();
 
     const pathname = location.pathname
         .split("/")
@@ -9,25 +14,32 @@ const BreadCrumb = () => {
 
     if (!pathname.length) return null;
 
+    const productMatch = matches.find(
+        m => m.pathname.includes("/products/")
+    );
+
+    const productName =
+        productMatch?.data?.product?.name;
+
     return (
         <nav
             className="
-    w-full
-    max-w-6xl
-    mx-auto
-    px-6
-    pt-6
-    pb-2
-    text-sm
-    text-stone-500
-    dark:text-stone-400
-  "
+        w-full
+        max-w-6xl
+        mx-auto
+        px-6
+        pt-6
+        pb-2
+        text-sm
+        text-stone-500
+        dark:text-stone-400
+      "
         >
             <ol className="flex items-center gap-2">
                 <li>
                     <Link
                         to="/"
-                        className="hover:text-primary transition-colors"
+                        className="hover:text-primary"
                     >
                         Home
                     </Link>
@@ -43,13 +55,20 @@ const BreadCrumb = () => {
                     const isLast =
                         index === pathname.length - 1;
 
-                    const label =
+                    let label =
                         value
                             .replace("-", " ")
                             .replace(
                                 /^\w/,
                                 c => c.toUpperCase()
                             );
+
+                    if (
+                        value === pathname[pathname.length - 1] &&
+                        productName
+                    ) {
+                        label = productName;
+                    }
 
                     return (
                         <li
@@ -59,13 +78,13 @@ const BreadCrumb = () => {
                             <span>/</span>
 
                             {isLast ? (
-                                <span className="font-medium text-primary">
+                                <span className="text-primary font-medium">
                   {label}
                 </span>
                             ) : (
                                 <Link
                                     to={to}
-                                    className="hover:text-primary transition-colors"
+                                    className="hover:text-primary"
                                 >
                                     {label}
                                 </Link>
@@ -77,4 +96,5 @@ const BreadCrumb = () => {
         </nav>
     );
 };
+
 export default BreadCrumb;
