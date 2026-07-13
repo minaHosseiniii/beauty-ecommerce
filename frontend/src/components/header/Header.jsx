@@ -1,7 +1,7 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeaf, faMoon, faShoppingBasket, faSun} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 const Header = () => {
     const [theme, setTheme] = useState(() => {
@@ -30,7 +30,7 @@ const Header = () => {
     py-1
     transition-all
     duration-300
-    ${isActive ? "text-primary border-b-2 border-primary font-bold": ""}
+    ${isActive ? "text-primary border-b-2 border-primary font-bold" : ""}
     `;
 
     const toggleTheme = () => {
@@ -136,12 +136,10 @@ const Header = () => {
                         </li>
 
                         <li>
-                            <Link
-                                to="/cart"
-                                className={`${navLinkClass} text-lg`}
-                            >
-                                <FontAwesomeIcon icon={faShoppingBasket} />
-                            </Link>
+                            <NavLink to="/cart" className={getNavClass}>
+
+                                <FontAwesomeIcon icon={faShoppingBasket}/>
+                            </NavLink>
                         </li>
 
                     </ul>

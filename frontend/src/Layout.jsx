@@ -1,9 +1,13 @@
 import Header from "./components/header/Header.jsx";
-import {Outlet} from "react-router-dom";
+import {Outlet, useNavigation} from "react-router-dom";
 import Footer from "./components/footer/Footer.jsx";
 import BreadCrumb from "./components/ui/BreadCrumb.jsx";
+import Loading from "./components/ui/Loading.jsx";
 
 function Layout() {
+    const navigation = useNavigation();
+    const isLoading = navigation.state === "loading";
+
     return (
         <div
             className="
@@ -20,7 +24,9 @@ function Layout() {
             <Header />
             <BreadCrumb />
             <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10">
-                <Outlet />
+                {
+                    isLoading ? <Loading /> : <Outlet />
+                }
             </main>
             <Footer />
         </div>

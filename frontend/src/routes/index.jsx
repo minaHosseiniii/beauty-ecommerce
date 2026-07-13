@@ -7,6 +7,7 @@ import Contact from "../components/pages/Contact";
 import Login from "../components/pages/Login";
 import Cart from "../components/pages/Cart";
 import ErrorPage from "../components/ui/ErrorPage.jsx";
+import {productsLoader} from "../loader/products.loader.js";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -14,7 +15,7 @@ export const router = createBrowserRouter(
             path="/"
             element={<Layout />}
             errorElement={<ErrorPage />}>
-            <Route index element={<Home />} />
+            <Route index element={<Home />} loader={productsLoader}/>
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
             <Route path="login" element={<Login />} />

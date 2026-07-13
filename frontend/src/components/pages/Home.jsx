@@ -1,43 +1,12 @@
-import {useEffect, useState} from "react";
-
-import productService from "../../api/product.service.js";
-
+import {useLoaderData} from "react-router-dom";
 import ErrorMessage from "../ui/ErrorMessage.jsx";
-import Loading from "../ui/Loading.jsx";
 
 import PageHeading from "./PageHeading.jsx";
 import ProductListings from "./ProductListings.jsx";
 
 export default function Home() {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const {products, error} = useLoaderData();
 
-    const fetchProducts = async () => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await productService.getAll();
-            setProducts(response.data);
-        } catch (error) {
-            setError(
-                error.response?.data?.message ??
-                "Failed to fetch products. Please try again."
-            );
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    if (loading) {
-        return <Loading/>;
-    }
 
     if (error) {
         return <ErrorMessage message={error}/>;
