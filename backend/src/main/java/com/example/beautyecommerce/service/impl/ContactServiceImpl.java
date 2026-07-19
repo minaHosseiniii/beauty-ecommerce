@@ -16,12 +16,8 @@ public class ContactServiceImpl implements ContactService {
     private final ContactMapper contactMapper;
 
     @Override
-    public Boolean addContact(ContactDTO contact) {
-        try {
-            contactRepository.save(contactMapper.toContact(contact));
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public ContactDTO addContact(ContactDTO contact) {
+            var saved =  contactRepository.save(contactMapper.toContact(contact));
+            return contactMapper.toContactDTO(saved);
     }
 }
