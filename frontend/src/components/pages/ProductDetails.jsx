@@ -1,13 +1,19 @@
 import { useLoaderData } from "react-router-dom";
 import ErrorMessage from "../ui/ErrorMessage.jsx";
 import Price from "./Price.jsx";
+import useCart from "../../store/hooks/UseCart.jsx";
 
 const ProductDetails = () => {
     const { product, error } = useLoaderData();
+    const { addToCart } = useCart();
 
     if (error) {
         return <ErrorMessage message={error} />;
     }
+
+    const handleAddToCart = () => {
+        addToCart(product, 1);
+    };
 
     return (
         <div
@@ -86,6 +92,7 @@ const ProductDetails = () => {
                         />
 
                         <button
+                            onClick={handleAddToCart}
                             className="
                                 px-8
                                 py-3

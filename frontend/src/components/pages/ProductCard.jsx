@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import Price from "./Price.jsx";
+import useCart from "../../store/hooks/UseCart.jsx";
 
 export default function ProductCard({ product }) {
+    const { addToCart } = useCart();
+
     return (
         <div
             className="
@@ -80,6 +83,7 @@ export default function ProductCard({ product }) {
                     />
 
                     <button
+                        onClick={() => addToCart(product)}
                         className="
                             rounded-lg
                             bg-primary

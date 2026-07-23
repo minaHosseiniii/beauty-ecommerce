@@ -3,46 +3,51 @@ import PageTitle from "../../components/pages/PageTitle";
 
 const inputStyle = `
     w-full
-    px-4
-    py-3
     rounded-xl
     border
-    border-gray-300
-    dark:border-gray-700
-    bg-white
-    dark:bg-dark
+    border-primary/30
+    bg-light
+    dark:bg-[#23271F]
+    px-4
+    py-3
     text-dark
     dark:text-light
-    placeholder:text-gray-400
-    focus:outline-none
+    placeholder:text-primary/60
+    transition-all
+    duration-300
+    focus:border-primary
     focus:ring-2
-    focus:ring-primary
+    focus:ring-primary/30
+    focus:outline-none
 `;
 
 const Login = () => {
     return (
-        <div className="max-w-lg mx-auto px-6 py-14">
+        <div className="max-w-lg mx-auto px-6 py-16">
+
             <PageTitle title="Login" />
 
             <form
                 className="
                     mt-12
-                    bg-white
-                    dark:bg-dark
                     rounded-3xl
-                    shadow-lg
-                    p-8
                     border
-                    border-gray-100
-                    dark:border-gray-700
+                    border-primary/20
+                    bg-light
+                    dark:bg-[#3F433B]
+                    p-8
+                    shadow-xl
+                    transition-colors
+                    duration-300
                     space-y-6
                 "
             >
+
                 <div>
                     <label
                         className="
-                            block
                             mb-2
+                            block
                             font-semibold
                             text-dark
                             dark:text-light
@@ -64,8 +69,8 @@ const Login = () => {
                 <div>
                     <label
                         className="
-                            block
                             mb-2
+                            block
                             font-semibold
                             text-dark
                             dark:text-light
@@ -87,13 +92,16 @@ const Login = () => {
                     type="submit"
                     className="
                         w-full
-                        py-3
                         rounded-xl
                         bg-primary
-                        text-white
+                        py-3
                         font-semibold
-                        hover:opacity-90
-                        transition
+                        text-white
+                        transition-all
+                        duration-300
+                        hover:bg-dark
+                        dark:hover:bg-[#5D764C]
+                        hover:shadow-lg
                         cursor-pointer
                     "
                 >
@@ -103,23 +111,28 @@ const Login = () => {
                 <p
                     className="
                         text-center
-                        text-gray-600
-                        dark:text-gray-300
+                        text-dark/70
+                        dark:text-light/70
                     "
                 >
                     Don't have an account?{" "}
                     <Link
                         to="/register"
                         className="
-                            text-primary
                             font-semibold
-                            hover:underline
+                            text-primary
+                            transition-colors
+                            duration-300
+                            hover:text-dark
+                            dark:hover:text-light
                         "
                     >
                         Register Here
                     </Link>
                 </p>
+
             </form>
+
         </div>
     );
 };

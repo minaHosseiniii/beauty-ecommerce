@@ -2,8 +2,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faLeaf, faMoon, faShoppingBasket, faSun} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
 import {NavLink} from "react-router-dom";
+import useCart from "../../store/hooks/UseCart.jsx";
 
 const Header = () => {
+    const {totalQuantity} = useCart();
     const [theme, setTheme] = useState(() => {
         return (
             localStorage.getItem("theme") ||
@@ -136,9 +138,40 @@ const Header = () => {
                         </li>
 
                         <li>
-                            <NavLink to="/cart" className={getNavClass}>
+                            <NavLink
+                                to="/cart"
+                                className="relative"
+                            >
+                                <FontAwesomeIcon
+                                    icon={faShoppingBasket}
+                                    className="
+            text-xl
+            text-primary
+            dark:text-stone-200
+        "
+                                />
 
-                                <FontAwesomeIcon icon={faShoppingBasket}/>
+                                {totalQuantity > 0 && (
+                                    <span
+                                        className="
+                absolute
+                -top-2
+                -right-3
+                w-5
+                h-5
+                rounded-full
+                bg-primary
+                text-white
+                text-[11px]
+                font-bold
+                flex
+                items-center
+                justify-center
+            "
+                                    >
+            {totalQuantity}
+        </span>
+                                )}
                             </NavLink>
                         </li>
 
