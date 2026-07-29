@@ -51,7 +51,7 @@ public class SecurityConfiguration {
     }
 
     private List<String> publicPaths() {
-        return List.of("/api/v1/products/**", "/api/v1/contacts/**", "/api/v1/auth/login");
+        return List.of("/api/v1/products/**", "/api/v1/contacts/**", "/api/v1/auth/**");
     }
 
     @Bean
