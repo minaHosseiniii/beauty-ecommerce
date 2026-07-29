@@ -1,5 +1,9 @@
-import { Link } from "react-router-dom";
+import {Form, Link, useActionData, useNavigate, useNavigation} from "react-router-dom";
+
+import {useEffect, useRef} from "react";
+
 import PageTitle from "../../components/pages/PageTitle";
+import useAuth from "../../store/hooks/UseAuth.jsx";
 
 const inputStyle = `
     w-full
@@ -22,12 +26,45 @@ const inputStyle = `
 `;
 
 const Login = () => {
+
+    const formRef = useRef(null);
+
+    const actionData = useActionData();
+
+    const navigation = useNavigation();
+
+    const isSubmitting = navigation.state === "submitting";
+
+    const navigate = useNavigate();
+
+    const {loginSuccess} = useAuth();
+
+    useEffect(() => {
+
+        if (actionData?.success) {
+            loginSuccess(
+                actionData.token,
+                actionData.user);
+
+            formRef.current?.reset();
+            const from = sessionStorage.getItem("redirectPath") || "/";
+            sessionStorage.removeItem("redirectPath");
+            navigate(from);
+
+        }
+
+    }, [actionData, navigate, loginSuccess]);
+
+
     return (
+
         <div className="max-w-lg mx-auto px-6 py-16">
 
-            <PageTitle title="Login" />
+            <PageTitle title="Login"/>
 
-            <form
+            <Form
+                ref={formRef}
+                method="post"
                 className="
                     mt-12
                     rounded-3xl
@@ -43,7 +80,40 @@ const Login = () => {
                 "
             >
 
+                {/* Success Message */}
+
+                {actionData?.success && (
+                    <div
+                        className="
+                            rounded-lg
+                            bg-green-100
+                            text-green-700
+                            px-4
+                            py-3
+                        "
+                    >
+                        {actionData.message}
+                    </div>
+                )}
+
+                {/* Error Message */}
+
+                {!actionData?.success && actionData?.message && (
+                    <div
+                        className="
+                            rounded-lg
+                            bg-red-100
+                            text-red-700
+                            px-4
+                            py-3
+                        "
+                    >
+                        {actionData.message}
+                    </div>
+                )}
+
                 <div>
+
                     <label
                         className="
                             mb-2
@@ -57,16 +127,20 @@ const Login = () => {
                     </label>
 
                     <input
+                        name="username"
                         type="text"
                         placeholder="Enter your username"
+                        autoComplete="username"
                         className={inputStyle}
                         minLength={4}
                         maxLength={30}
                         required
                     />
+
                 </div>
 
                 <div>
+
                     <label
                         className="
                             mb-2
@@ -80,16 +154,20 @@ const Login = () => {
                     </label>
 
                     <input
+                        name="password"
                         type="password"
                         placeholder="Enter your password"
+                        autoComplete="current-password"
                         className={inputStyle}
                         minLength={6}
                         required
                     />
+
                 </div>
 
                 <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="
                         w-full
                         rounded-xl
@@ -102,10 +180,13 @@ const Login = () => {
                         hover:bg-dark
                         dark:hover:bg-[#5D764C]
                         hover:shadow-lg
-                        cursor-pointer
+                        disabled:opacity-60
+                        disabled:cursor-not-allowed
                     "
                 >
-                    Login
+                    {isSubmitting
+                        ? "Authenticating..."
+                        : "Login"}
                 </button>
 
                 <p
@@ -116,6 +197,7 @@ const Login = () => {
                     "
                 >
                     Don't have an account?{" "}
+
                     <Link
                         to="/register"
                         className="
@@ -129,12 +211,15 @@ const Login = () => {
                     >
                         Register Here
                     </Link>
+
                 </p>
 
-            </form>
+            </Form>
 
         </div>
+
     );
+
 };
 
 export default Login;

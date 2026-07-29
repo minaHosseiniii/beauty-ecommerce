@@ -1,11 +1,32 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faLeaf, faMoon, faShoppingBasket, faSun} from "@fortawesome/free-solid-svg-icons";
-import {useEffect, useState} from "react";
-import {NavLink} from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faLeaf,
+    faMoon,
+    faShoppingBasket,
+    faSun,
+    faAngleDown
+} from "@fortawesome/free-solid-svg-icons";
+
+import { useEffect, useState } from "react";
+import { NavLink, Link } from "react-router-dom";
+
 import useCart from "../../store/hooks/UseCart.jsx";
+import useAuth from "../../store/hooks/UseAuth.jsx";
 
 const Header = () => {
-    const {totalQuantity} = useCart();
+
+    const { totalQuantity } = useCart();
+
+    const { authState } = useAuth();
+
+    const { isAuthenticated } = authState;
+
+    const isAdmin = true;
+
+    const [isUserMenuOpen, setUserMenuOpen] = useState(false);
+
+    const [isAdminMenuOpen, setAdminMenuOpen] = useState(false);
+
     const [theme, setTheme] = useState(() => {
         return (
             localStorage.getItem("theme") ||
@@ -14,103 +35,121 @@ const Header = () => {
                 : "light")
         );
     });
-    const navLinkClass = `
-    font-primary
-    text-base
-    font-semibold
-    text-primary
-    dark:text-stone-200
-    transition-colors
-    duration-300
-    hover:text-dark
-    dark:hover:text-primary
-`;
 
-    const getNavClass = ({isActive}) => `
-    ${navLinkClass}
-    px-2
-    py-1
-    transition-all
-    duration-300
-    ${isActive ? "text-primary border-b-2 border-primary font-bold" : ""}
+    const navLinkClass = `
+        font-primary
+        text-base
+        font-semibold
+        text-primary
+        dark:text-stone-200
+        transition-colors
+        duration-300
+        hover:text-dark
+        dark:hover:text-primary
     `;
 
+    const getNavClass = ({ isActive }) => `
+        ${navLinkClass}
+        px-2
+        py-1
+        transition-all
+        duration-300
+        ${isActive ? "text-primary border-b-2 border-primary font-bold" : ""}
+    `;
+
+    const dropdownLinkClass = `
+        block
+        px-4
+        py-2
+        rounded-lg
+        hover:bg-primary/10
+        transition
+    `;
+
+    const toggleUserMenu = () => {
+        setUserMenuOpen(prev => !prev);
+    };
+
+    const toggleAdminMenu = () => {
+        setAdminMenuOpen(prev => !prev);
+    };
+
     const toggleTheme = () => {
-        const newTheme = theme === "dark"
-            ? "light"
-            : "dark";
+
+        const newTheme =
+            theme === "dark"
+                ? "light"
+                : "dark";
 
         setTheme(newTheme);
-        localStorage.setItem(
-            "theme",
-            newTheme
-        );
+
+        localStorage.setItem("theme", newTheme);
+
     };
 
     useEffect(() => {
+
         const root = document.documentElement;
+
         if (theme === "dark") {
             root.classList.add("dark");
         } else {
             root.classList.remove("dark");
         }
-        localStorage.setItem("theme", theme);
+
     }, [theme]);
 
     return (
+
         <header
             className="
-        sticky
-        top-0
-        z-20
-        bg-light/90
-        dark:bg-[#171A16]/90
-        backdrop-blur-md
-        border-b
-        border-stone-200
-        dark:border-[#2B3328]
-        transition-colors
-        duration-300
-">
+                sticky
+                top-0
+                z-20
+                bg-light/90
+                dark:bg-[#171A16]/90
+                backdrop-blur-md
+                border-b
+                border-stone-200
+                dark:border-[#2B3328]
+            "
+        >
+
             <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
 
                 <NavLink
                     to="/"
-                    className="flex items-center gap-2 transition-opacity duration-300 hover:opacity-80">
+                    className="flex items-center gap-2"
+                >
+
                     <FontAwesomeIcon
                         icon={faLeaf}
-                        className="text-primary dark:text-emerald-300 text-xl"/>
-                    <span
-                        className="font-primary text-2xl font-bold text-primary dark:text-stone-100 tracking-wide">
+                        className="text-primary"
+                    />
+
+                    <span className="font-bold text-2xl">
                         Aura Cosmetics
                     </span>
+
                 </NavLink>
 
                 <nav>
+
                     <ul className="flex items-center gap-8">
 
                         <li>
+
                             <button
                                 onClick={toggleTheme}
-                                aria-label="Toggle Theme"
-                                className="
-      flex
-      items-center
-      justify-center
-      w-9
-      h-9
-      rounded-full
-      border
-      border-primary/40
-      text-primary
-      dark:text-stone-200
-      hover:bg-primary/10
-      dark:hover:bg-stone-800
-      transition-all
-      duration-300
-    ">
-                                <FontAwesomeIcon icon={theme === "dark" ? faSun : faMoon}/>
+                                className="w-9 h-9 rounded-full border"
+                            >
+
+                                <FontAwesomeIcon
+                                    icon={theme === "dark" ? faSun : faMoon}
+                                />
+
                             </button>
+
                         </li>
 
                         <li>
@@ -132,54 +171,190 @@ const Header = () => {
                         </li>
 
                         <li>
-                            <NavLink to="/login" className={getNavClass}>
-                                Login
-                            </NavLink>
+
+                            {isAuthenticated ? (
+
+                                <div className="relative">
+
+                                    <button
+                                        onClick={toggleUserMenu}
+                                        className="flex items-center gap-2"
+                                    >
+
+                                        Hello John Doe
+
+                                        <FontAwesomeIcon icon={faAngleDown} />
+
+                                    </button>
+
+                                    {isUserMenuOpen && (
+
+                                        <div
+                                            className="
+                                                absolute
+                                                right-0
+                                                mt-3
+                                                w-56
+                                                rounded-xl
+                                                bg-white
+                                                dark:bg-[#23271F]
+                                                shadow-lg
+                                                border
+                                            "
+                                        >
+
+                                            <ul>
+
+                                                <li>
+                                                    <Link
+                                                        to="/profile"
+                                                        className={dropdownLinkClass}
+                                                    >
+                                                        Profile
+                                                    </Link>
+                                                </li>
+
+                                                <li>
+                                                    <Link
+                                                        to="/orders"
+                                                        className={dropdownLinkClass}
+                                                    >
+                                                        Orders
+                                                    </Link>
+                                                </li>
+
+                                                {isAdmin && (
+
+                                                    <li>
+
+                                                        <button
+                                                            onClick={toggleAdminMenu}
+                                                            className="w-full flex justify-between px-4 py-2"
+                                                        >
+
+                                                            Admin
+
+                                                            <FontAwesomeIcon
+                                                                icon={faAngleDown}
+                                                            />
+
+                                                        </button>
+
+                                                        {isAdminMenuOpen && (
+
+                                                            <ul className="pl-4">
+
+                                                                <li>
+
+                                                                    <Link
+                                                                        to="/admin/orders"
+                                                                        className={dropdownLinkClass}
+                                                                    >
+                                                                        Orders
+                                                                    </Link>
+
+                                                                </li>
+
+                                                                <li>
+
+                                                                    <Link
+                                                                        to="/admin/messages"
+                                                                        className={dropdownLinkClass}
+                                                                    >
+                                                                        Messages
+                                                                    </Link>
+
+                                                                </li>
+
+                                                            </ul>
+
+                                                        )}
+
+                                                    </li>
+
+                                                )}
+
+                                                <li>
+
+                                                    <Link
+                                                        to="/"
+                                                        className={dropdownLinkClass}
+                                                    >
+                                                        Logout
+                                                    </Link>
+
+                                                </li>
+
+                                            </ul>
+
+                                        </div>
+
+                                    )}
+
+                                </div>
+
+                            ) : (
+
+                                <NavLink
+                                    to="/login"
+                                    className={getNavClass}
+                                >
+                                    Login
+                                </NavLink>
+
+                            )}
+
                         </li>
 
                         <li>
+
                             <NavLink
                                 to="/cart"
                                 className="relative"
                             >
+
                                 <FontAwesomeIcon
                                     icon={faShoppingBasket}
-                                    className="
-            text-xl
-            text-primary
-            dark:text-stone-200
-        "
+                                    className="text-xl"
                                 />
 
                                 {totalQuantity > 0 && (
+
                                     <span
                                         className="
-                absolute
-                -top-2
-                -right-3
-                w-5
-                h-5
-                rounded-full
-                bg-primary
-                text-white
-                text-[11px]
-                font-bold
-                flex
-                items-center
-                justify-center
-            "
+                                            absolute
+                                            -top-2
+                                            -right-3
+                                            w-5
+                                            h-5
+                                            rounded-full
+                                            bg-primary
+                                            text-white
+                                            text-[11px]
+                                            flex
+                                            items-center
+                                            justify-center
+                                        "
                                     >
-            {totalQuantity}
-        </span>
+                                        {totalQuantity}
+                                    </span>
+
                                 )}
+
                             </NavLink>
+
                         </li>
 
                     </ul>
+
                 </nav>
+
             </div>
+
         </header>
+
     );
+
 };
 
 export default Header;

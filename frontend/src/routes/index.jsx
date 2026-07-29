@@ -11,6 +11,8 @@ import {productsLoader} from "../loader/products.loader.js";
 import {contactAction} from "../action/contact.action.js";
 import ProductDetails from "../components/pages/ProductDetails.jsx";
 import {productsDetailsLoader} from "../loader/products.details.loader.js";
+import {authAction} from "../action/auth.action.js";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -21,9 +23,12 @@ export const router = createBrowserRouter(
             <Route index element={<Home/>} loader={productsLoader}/>
             <Route path="about" element={<About/>}/>
             <Route path="contact" element={<Contact/>} action={contactAction}/>
-            <Route path="login" element={<Login/>}/>
-            <Route path="cart" element={<Cart/>}/>
-            <Route path="products/:productId" element={<ProductDetails/>} loader={productsDetailsLoader}/>
+            <Route path="login" element={<Login/>} action={authAction}/>
+            <Route element={<ProtectedRoute/>}>
+                <Route path="cart" element={<Cart/>}/>
+            </Route>
+            <Route path="products/:productId" element={<ProductDetails/>}
+                   loader={productsDetailsLoader}/>
         </Route>
     )
 );
