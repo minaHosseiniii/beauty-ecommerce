@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .message(e.getMessage())
                 .build();
-        log.error("An exception occurred due to : {}",e.getMessage());
+        log.error("Unexpected exception", e);
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
