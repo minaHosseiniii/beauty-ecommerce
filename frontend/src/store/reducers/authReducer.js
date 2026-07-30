@@ -1,6 +1,7 @@
 import {LOGIN_SUCCESS, LOGOUT} from "../actions/AuthActionTypes.js";
 
 export function authReducer(state,action) {
+    console.log(action.type);
     switch (action.type) {
         case LOGIN_SUCCESS:
             return {

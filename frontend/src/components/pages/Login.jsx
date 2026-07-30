@@ -39,21 +39,31 @@ const Login = () => {
 
     const {loginSuccess} = useAuth();
 
+    const hasLoggedIn = useRef(false);
+
     useEffect(() => {
 
-        if (actionData?.success) {
-            loginSuccess(
-                actionData.token,
-                actionData.user);
+        if (!actionData?.success) return;
 
-            formRef.current?.reset();
-            const from = sessionStorage.getItem("redirectPath") || "/";
-            sessionStorage.removeItem("redirectPath");
-            navigate(from);
+        if (hasLoggedIn.current) return;
 
-        }
+        hasLoggedIn.current = true;
 
-    }, [actionData, navigate, loginSuccess]);
+        loginSuccess(
+            actionData.token,
+            actionData.user
+        );
+
+        formRef.current?.reset();
+
+        const from =
+            sessionStorage.getItem("redirectPath") || "/";
+
+        sessionStorage.removeItem("redirectPath");
+
+        navigate(from);
+
+    }, [actionData]);
 
 
     return (

@@ -10,6 +10,7 @@ const initialAuthState = {
 };
 
 const AuthProvider = ({ children }) => {
+    console.count("AuthProvider");
 
     const [authState, dispatch] = useReducer(
         authReducer,
@@ -17,6 +18,7 @@ const AuthProvider = ({ children }) => {
     );
 
     const loginSuccess = (token, user) => {
+        console.log("LOGIN SUCCESS CALLED");
         dispatch({
             type: LOGIN_SUCCESS,
             payload: {

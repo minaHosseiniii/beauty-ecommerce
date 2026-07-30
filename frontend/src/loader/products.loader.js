@@ -3,6 +3,7 @@
 import productService from "../api/product.service";
 
 export async function productsLoader() {
+    console.count("products loader");
     try {
         const response = await productService.getAll();
 
