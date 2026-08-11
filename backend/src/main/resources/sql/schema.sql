@@ -24,3 +24,50 @@ CREATE IF NOT EXISTS TABLE contacts (
                           updated_at TIMESTAMP,
                           updated_by VARCHAR(100)
 );
+
+
+CREATE TABLE IF NOT EXISTS customers (
+                           customer_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+                           name VARCHAR(100) NOT NULL,
+
+                           email VARCHAR(100) NOT NULL,
+
+                           mobile_number VARCHAR(15) NOT NULL,
+
+                           password_hash VARCHAR(255) NOT NULL,
+
+                           created_at TIMESTAMP,
+
+                           created_by VARCHAR(100),
+
+                           updated_at TIMESTAMP,
+
+                           updated_by VARCHAR(100),
+
+                           UNIQUE(email),
+
+                           UNIQUE(mobile_number)
+);
+
+CREATE TABLE IF NOT  EXISTS address (
+
+                         address_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+                         customer_id BIGINT NOT NULL,
+
+                         street VARCHAR(150) NOT NULL,
+
+                         city VARCHAR(100) NOT NULL,
+
+                         state VARCHAR(100) NOT NULL,
+
+                         postal_code VARCHAR(20) NOT NULL,
+
+                         country VARCHAR(100) NOT NULL,
+
+                         CONSTRAINT fk_address_customer
+                             FOREIGN KEY(customer_id)
+                                 REFERENCES customers(customer_id)
+                                 ON DELETE CASCADE
+);

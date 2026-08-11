@@ -17,9 +17,12 @@ const Header = () => {
 
     const { totalQuantity } = useCart();
 
-    const { authState } = useAuth();
+    const { authState, logout } = useAuth();
 
-    const { isAuthenticated } = authState;
+    const {
+        isAuthenticated,
+        user
+    } = authState;
 
     const isAdmin = true;
 
@@ -181,7 +184,16 @@ const Header = () => {
                                         className="flex items-center gap-2"
                                     >
 
-                                        Hello John Doe
+                                        Hello{" "}
+                                        {
+                                            user?.name
+                                                ? (
+                                                    user.name.length > 5
+                                                        ? `${user.name.slice(0,5)}...`
+                                                        : user.name
+                                                )
+                                                : ""
+                                        }
 
                                         <FontAwesomeIcon icon={faAngleDown} />
 
@@ -277,6 +289,7 @@ const Header = () => {
                                                 <li>
 
                                                     <Link
+                                                        onClick={logout}
                                                         to="/"
                                                         className={dropdownLinkClass}
                                                     >

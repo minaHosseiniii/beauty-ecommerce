@@ -1,6 +1,7 @@
 package com.example.beautyecommerce.configuration;
 
 import com.example.beautyecommerce.dto.ErrorResponseDTO;
+import com.example.beautyecommerce.exceptions.ValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,19 @@ import java.time.Instant;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleValidationException(ValidationException ex, HttpServletRequest request) {
+        ErrorResponseDTO response = ErrorResponseDTO.builder()
+                .timestamp(Instant.now())
+                .errorCode(HttpStatus.BAD_REQUEST)
+                .apiPath(request.getRequestURI())
+                .message(ex.getMessage())
+                .validationErrors(ex.getErrors())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e, HttpServletRequest request) {
 

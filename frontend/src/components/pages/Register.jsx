@@ -1,4 +1,3 @@
-
 import {
     Form,
     Link,
@@ -7,8 +6,7 @@ import {
     useSubmit
 } from "react-router-dom";
 
-import {useEffect, useRef} from "react";
-
+import { useEffect, useRef, useState } from "react";
 
 const Register = () => {
 
@@ -17,25 +15,18 @@ const Register = () => {
     const actionData = useActionData();
     const navigate = useNavigate();
 
+    const [passwordError, setPasswordError] = useState("");
+
     useEffect(() => {
 
         if (actionData?.success) {
 
             formRef.current?.reset();
-
             navigate("/login");
 
         }
 
     }, [actionData, navigate]);
-
-    const validatePasswords = (formData) => {
-
-        const password = formData.get("password");
-        const confirmPassword = formData.get("confirmPassword");
-
-        return password === confirmPassword;
-    };
 
     const handleSubmit = (event) => {
 
@@ -43,8 +34,14 @@ const Register = () => {
 
         const formData = new FormData(formRef.current);
 
-        if (!validatePasswords(formData))
+        if (formData.get("password") !== formData.get("confirmPassword")) {
+
+            setPasswordError("Passwords do not match.");
             return;
+
+        }
+
+        setPasswordError("");
 
         submit(formData, {
             method: "post"
@@ -56,55 +53,80 @@ const Register = () => {
 
         <div
             className="
-            min-h-screen
-            bg-light
-            dark:bg-[#171A16]
-            flex
-            items-center
-            justify-center
-            px-6
-            py-12
-        "
+                min-h-screen
+                bg-light
+                dark:bg-[#171A16]
+                flex
+                items-center
+                justify-center
+                px-6
+                py-12
+            "
         >
 
             <div
                 className="
-                w-full
-                max-w-md
-                rounded-3xl
-                bg-white
-                dark:bg-[#222821]
-                shadow-xl
-                border
-                border-stone-200
-                dark:border-[#31392F]
-                p-8
-            "
+                    w-full
+                    max-w-md
+                    rounded-3xl
+                    bg-white
+                    dark:bg-[#222821]
+                    shadow-xl
+                    border
+                    border-stone-200
+                    dark:border-[#31392F]
+                    p-8
+                "
             >
 
                 <h1
                     className="
-                    text-3xl
-                    font-bold
-                    font-primary
-                    text-center
-                    text-primary
-                    mb-2
-                "
+                        text-3xl
+                        font-bold
+                        text-center
+                        text-primary
+                        mb-2
+                    "
                 >
                     Create Account
                 </h1>
 
                 <p
                     className="
-                    text-center
-                    text-stone-500
-                    dark:text-stone-400
-                    mb-8
-                "
+                        text-center
+                        text-stone-500
+                        dark:text-stone-400
+                        mb-8
+                    "
                 >
                     Welcome to Aura Cosmetics
                 </p>
+
+                {/* Global Error */}
+
+                {
+                    actionData?.message && !actionData.success && (
+
+                        <div
+                            className="
+                                mb-6
+                                rounded-xl
+                                border
+                                border-red-300
+                                bg-red-50
+                                dark:bg-red-900/20
+                                dark:border-red-700
+                                p-4
+                                text-red-600
+                                dark:text-red-300
+                                text-sm
+                            "
+                        >
+                            {actionData.message}
+                        </div>
+
+                    )
+                }
 
                 <Form
                     method="post"
@@ -126,28 +148,29 @@ const Register = () => {
                             name="name"
                             placeholder="John Doe"
                             className="
-                            w-full
-                            rounded-xl
-                            border
-                            border-stone-300
-                            dark:border-stone-700
-                            bg-white
-                            dark:bg-[#2C342A]
-                            px-4
-                            py-3
-                            outline-none
-                            focus:border-primary
-                            transition
-                        "
+                                w-full
+                                rounded-xl
+                                border
+                                border-stone-300
+                                dark:border-stone-700
+                                bg-white
+                                dark:bg-[#2C342A]
+                                px-4
+                                py-3
+                                outline-none
+                                focus:border-primary
+                            "
                         />
 
-                        {actionData?.errors?.name && (
+                        {
+                            actionData?.errors?.name && (
 
-                            <p className="text-red-500 text-sm mt-1">
-                                {actionData.errors.name}
-                            </p>
+                                <p className="mt-1 text-sm text-red-500">
+                                    {actionData.errors.name}
+                                </p>
 
-                        )}
+                            )
+                        }
 
                     </div>
 
@@ -163,16 +186,30 @@ const Register = () => {
                             type="email"
                             name="email"
                             placeholder="example@email.com"
-                            className="w-full rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-[#2C342A] px-4 py-3 outline-none focus:border-primary transition"
+                            className="
+                                w-full
+                                rounded-xl
+                                border
+                                border-stone-300
+                                dark:border-stone-700
+                                bg-white
+                                dark:bg-[#2C342A]
+                                px-4
+                                py-3
+                                outline-none
+                                focus:border-primary
+                            "
                         />
 
-                        {actionData?.errors?.email && (
+                        {
+                            actionData?.errors?.email && (
 
-                            <p className="text-red-500 text-sm mt-1">
-                                {actionData.errors.email}
-                            </p>
+                                <p className="mt-1 text-sm text-red-500">
+                                    {actionData.errors.email}
+                                </p>
 
-                        )}
+                            )
+                        }
 
                     </div>
 
@@ -188,16 +225,30 @@ const Register = () => {
                             type="text"
                             name="mobileNumber"
                             placeholder="09123456789"
-                            className="w-full rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-[#2C342A] px-4 py-3 outline-none focus:border-primary transition"
+                            className="
+                                w-full
+                                rounded-xl
+                                border
+                                border-stone-300
+                                dark:border-stone-700
+                                bg-white
+                                dark:bg-[#2C342A]
+                                px-4
+                                py-3
+                                outline-none
+                                focus:border-primary
+                            "
                         />
 
-                        {actionData?.errors?.mobileNumber && (
+                        {
+                            actionData?.errors?.mobileNumber && (
 
-                            <p className="text-red-500 text-sm mt-1">
-                                {actionData.errors.mobileNumber}
-                            </p>
+                                <p className="mt-1 text-sm text-red-500">
+                                    {actionData.errors.mobileNumber}
+                                </p>
 
-                        )}
+                            )
+                        }
 
                     </div>
 
@@ -212,16 +263,30 @@ const Register = () => {
                         <input
                             type="password"
                             name="password"
-                            className="w-full rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-[#2C342A] px-4 py-3 outline-none focus:border-primary transition"
+                            className="
+                                w-full
+                                rounded-xl
+                                border
+                                border-stone-300
+                                dark:border-stone-700
+                                bg-white
+                                dark:bg-[#2C342A]
+                                px-4
+                                py-3
+                                outline-none
+                                focus:border-primary
+                            "
                         />
 
-                        {actionData?.errors?.password && (
+                        {
+                            actionData?.errors?.password && (
 
-                            <p className="text-red-500 text-sm mt-1">
-                                {actionData.errors.password}
-                            </p>
+                                <p className="mt-1 text-sm text-red-500">
+                                    {actionData.errors.password}
+                                </p>
 
-                        )}
+                            )
+                        }
 
                     </div>
 
@@ -236,32 +301,55 @@ const Register = () => {
                         <input
                             type="password"
                             name="confirmPassword"
-                            className="w-full rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-[#2C342A] px-4 py-3 outline-none focus:border-primary transition"
+                            className="
+                                w-full
+                                rounded-xl
+                                border
+                                border-stone-300
+                                dark:border-stone-700
+                                bg-white
+                                dark:bg-[#2C342A]
+                                px-4
+                                py-3
+                                outline-none
+                                focus:border-primary
+                            "
                         />
+
+                        {
+                            passwordError && (
+
+                                <p className="mt-1 text-sm text-red-500">
+                                    {passwordError}
+                                </p>
+
+                            )
+                        }
 
                     </div>
 
                     <button
+                        type="submit"
                         className="
-                        w-full
-                        rounded-xl
-                        bg-primary
-                        hover:opacity-90
-                        text-white
-                        py-3
-                        font-semibold
-                        transition
-                    "
+                            w-full
+                            rounded-xl
+                            bg-primary
+                            hover:opacity-90
+                            text-white
+                            py-3
+                            font-semibold
+                            transition
+                        "
                     >
                         Register
                     </button>
 
                     <p
                         className="
-                        text-center
-                        text-sm
-                        text-stone-500
-                    "
+                            text-center
+                            text-sm
+                            text-stone-500
+                        "
                     >
                         Already have an account?
 

@@ -1,6 +1,6 @@
 import authService from "../api/auth.service.js";
 
-export async function authActions({ request }) {
+export async function authActions({request}) {
 
     const formData = await request.formData();
 
@@ -39,7 +39,7 @@ export async function authActions({ request }) {
 }
 
 
-export async function registerAction({ request }) {
+export async function registerAction({request}) {
 
     const formData = await request.formData();
 
@@ -65,7 +65,8 @@ export async function registerAction({ request }) {
 
             return {
                 success: false,
-                errors: e.response.data
+                message: e.response.data.message,
+                errors: e.response.data.validationErrors
             };
 
         }
