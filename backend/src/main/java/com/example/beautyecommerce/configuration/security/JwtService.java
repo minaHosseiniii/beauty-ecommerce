@@ -39,7 +39,7 @@ public class JwtService {
                 .issuer("beauty-ecommerce")
                 .subject(user.getEmail())
                 .claim("username", user.getName())
-                .claim("roles", authorities)
+                .claim("authorities", authorities)
                 .issuedAt(now)
                 .expiration(expiration)
                 .signWith(getSecretKey())
