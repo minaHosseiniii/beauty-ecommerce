@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,4 +33,10 @@ public class Customer extends BaseEntity {
             fetch = FetchType.LAZY,
             orphanRemoval = true)
     List<Address> addresses = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "customer_role",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }

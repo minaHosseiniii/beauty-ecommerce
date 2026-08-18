@@ -7,36 +7,84 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-public class CustomerAuthenticationProvider implements AuthenticationProvider {
+public class CustomerAuthenticationProvider
+        implements AuthenticationProvider {
+
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(
+            Authentication authentication)
+            throws AuthenticationException {
+
         var email = authentication.getName();
-        var password = authentication.getCredentials().toString();
 
-        var customer = customerRepository.findByEmail(email).orElseThrow(() ->
-                new UsernameNotFoundException("Customer not found : " + email));
+        var password =
+                authentication.getCredentials().toString();
 
-        if (!passwordEncoder.matches(password, customer.getPasswordHash())) {
-            throw new BadCredentialsException("Invalid password");
+        var customer =
+                customerRepository.findCustomerForAuthenticationByEmail(email)
+                        .orElseThrow(() ->
+                                new UsernameNotFoundException(
+                                        "Customer not found: " + email
+                                )
+                        );
+
+        if (!passwordEncoder.matches(
+                password,
+                customer.getPasswordHash())) {
+
+            throw new BadCredentialsException(
+                    "Invalid password"
+            );
         }
 
-        return new UsernamePasswordAuthenticationToken(customer, null, Collections.emptyList());
+        Set<GrantedAuthority> authorities =
+                customer.getRoles()
+                        .stream()
+                        .flatMap(role -> Stream.concat(
+
+                                Stream.of(
+                                        new SimpleGrantedAuthority(
+                                                role.getRoleName()
+                                        )
+                                ),
+
+                                role.getPermissions()
+                                        .stream()
+                                        .map(permission ->
+                                                new SimpleGrantedAuthority(
+                                                        permission.getPermissionName()
+                                                )
+                                        )
+                        ))
+                        .collect(Collectors.toSet());
+
+        return new UsernamePasswordAuthenticationToken(
+                customer,
+                null,
+                authorities
+        );
     }
 
     @Override
-    public boolean supports(Class<?> authentication) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+    public boolean supports(
+            Class<?> authentication) {
+
+        return UsernamePasswordAuthenticationToken.class
+                .isAssignableFrom(authentication);
     }
 }
