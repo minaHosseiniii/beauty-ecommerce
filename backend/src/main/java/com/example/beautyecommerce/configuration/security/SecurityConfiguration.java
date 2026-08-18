@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,8 +30,17 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> {
             publicPaths().forEach(path -> request.requestMatchers(path).permitAll());
-            request.anyRequest().authenticated();
+
+            request.requestMatchers("/api/v1/admin/**")
+                    .hasRole("ADMIN");
+
+            request.requestMatchers("/api/v1/profile/**")
+                    .hasAnyRole("USER", "ADMIN");
+
+            request.requestMatchers("/api/v1/address/**")
+                    .hasAnyRole("USER", "ADMIN");
         });
+
         http.addFilterBefore(jwtTokenValidationFilter, UsernamePasswordAuthenticationFilter.class);
         http.httpBasic(Customizer.withDefaults());
         http.formLogin(Customizer.withDefaults());
