@@ -3,10 +3,12 @@ package com.example.beautyecommerce.service.impl;
 import com.example.beautyecommerce.dto.CustomerDTO;
 import com.example.beautyecommerce.dto.RegisterRequestDTO;
 import com.example.beautyecommerce.entity.Customer;
+import com.example.beautyecommerce.entity.Role;
 import com.example.beautyecommerce.exceptions.ValidationException;
 import com.example.beautyecommerce.mapper.CustomerMapper;
 import com.example.beautyecommerce.repository.CustomerRepository;
 import com.example.beautyecommerce.service.CustomerService;
+import com.example.beautyecommerce.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
@@ -19,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -30,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerMapper customerMapper;
     private final PasswordEncoder passwordEncoder;
     private final CompromisedPasswordChecker passwordChecker;
+    private final RoleService roleService;
 
 
     @Override
@@ -45,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         try {
-            if (passwordChecker.check(dto.getPassword()).isCompromised()) {
+            if (decision.isCompromised()) {
                 validationErrors.put("password", "Choose a stronger password");
             }
         } catch (Exception ex) {
@@ -56,8 +61,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ValidationException(validationErrors);
         }
 
+        Role roleUser = roleService.findByRoleName("ROLE_USER");
         var newCustomer = customerMapper.toCustomer(dto);
         newCustomer.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
+        newCustomer.setRoles(Set.of(roleUser));
         return customerMapper.toCustomerDTO(customerRepository.save(newCustomer));
     }
 

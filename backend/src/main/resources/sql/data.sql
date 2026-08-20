@@ -1,8 +1,12 @@
+-- ============================================================
+-- PRODUCTS
+-- ============================================================
+
 DELETE FROM products;
+
 INSERT INTO products
 (name, description, price, popularity, image_url, created_by)
 VALUES
-
     ('Rose Hydrating Toner',
      'Refreshing rose water toner that hydrates and balances skin.',
      18.99, 95, 'images/rose-hydrating-toner.jpg', 'system'),
@@ -54,3 +58,199 @@ VALUES
     ('Keratin Repair Conditioner',
      'Nourishing conditioner for silky and healthy hair.',
      21.99, 88, 'images/keratin-conditioner.jpg', 'system');
+
+
+-- ============================================================
+-- ROLES
+-- ============================================================
+DELETE FROM role_permission;
+DELETE FROM customer_role;
+
+DELETE FROM permissions;
+DELETE FROM roles;
+
+INSERT INTO roles
+(role_name, created_at, created_by)
+SELECT 'ROLE_USER', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM roles
+    WHERE role_name = 'ROLE_USER'
+);
+
+INSERT INTO roles
+(role_name, created_at, created_by)
+SELECT 'ROLE_ADMIN', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM roles
+    WHERE role_name = 'ROLE_ADMIN'
+);
+
+INSERT INTO roles
+(role_name, created_at, created_by)
+SELECT 'ROLE_MANAGER', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM roles
+    WHERE role_name = 'ROLE_MANAGER'
+);
+
+
+-- ============================================================
+-- PERMISSIONS
+-- ============================================================
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'PRODUCT_READ', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'PRODUCT_READ'
+);
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'PRODUCT_CREATE', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'PRODUCT_CREATE'
+);
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'PRODUCT_UPDATE', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'PRODUCT_UPDATE'
+);
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'PRODUCT_DELETE', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'PRODUCT_DELETE'
+);
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'PROFILE_READ', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'PROFILE_READ'
+);
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'PROFILE_UPDATE', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'PROFILE_UPDATE'
+);
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'ADDRESS_CREATE', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'ADDRESS_CREATE'
+);
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'ADDRESS_UPDATE', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'ADDRESS_UPDATE'
+);
+
+INSERT INTO permissions
+(permission_name, created_at, created_by)
+SELECT 'ADDRESS_DELETE', CURRENT_TIMESTAMP, 'system'
+    WHERE NOT EXISTS (
+    SELECT 1
+    FROM permissions
+    WHERE permission_name = 'ADDRESS_DELETE'
+);
+
+
+-- ============================================================
+-- ROLE -> PERMISSION
+-- ============================================================
+
+-- USER permissions
+
+INSERT INTO role_permission (role_id, permission_id)
+SELECT r.role_id, p.permission_id
+FROM roles r
+         JOIN permissions p
+WHERE r.role_name = 'ROLE_USER'
+  AND p.permission_name IN (
+                            'PRODUCT_READ',
+                            'PROFILE_READ',
+                            'PROFILE_UPDATE',
+                            'ADDRESS_CREATE',
+                            'ADDRESS_UPDATE',
+                            'ADDRESS_DELETE'
+    )
+  AND NOT EXISTS (
+    SELECT 1
+    FROM role_permission rp
+    WHERE rp.role_id = r.role_id
+      AND rp.permission_id = p.permission_id
+);
+
+
+-- MANAGER permissions
+
+INSERT INTO role_permission (role_id, permission_id)
+SELECT r.role_id, p.permission_id
+FROM roles r
+         JOIN permissions p
+WHERE r.role_name = 'ROLE_MANAGER'
+  AND p.permission_name IN (
+                            'PRODUCT_READ',
+                            'PRODUCT_CREATE',
+                            'PRODUCT_UPDATE'
+    )
+  AND NOT EXISTS (
+    SELECT 1
+    FROM role_permission rp
+    WHERE rp.role_id = r.role_id
+      AND rp.permission_id = p.permission_id
+);
+
+
+-- ADMIN permissions
+
+INSERT INTO role_permission (role_id, permission_id)
+SELECT r.role_id, p.permission_id
+FROM roles r
+         JOIN permissions p
+WHERE r.role_name = 'ROLE_ADMIN'
+  AND p.permission_name IN (
+                            'PRODUCT_READ',
+                            'PRODUCT_CREATE',
+                            'PRODUCT_UPDATE',
+                            'PRODUCT_DELETE',
+                            'PROFILE_READ',
+                            'PROFILE_UPDATE',
+                            'ADDRESS_CREATE',
+                            'ADDRESS_UPDATE',
+                            'ADDRESS_DELETE'
+    )
+  AND NOT EXISTS (
+    SELECT 1
+    FROM role_permission rp
+    WHERE rp.role_id = r.role_id
+      AND rp.permission_id = p.permission_id
+);
