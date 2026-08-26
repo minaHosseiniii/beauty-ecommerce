@@ -4,9 +4,9 @@ import { authReducer } from "../reducers/authReducer.js";
 import { LOGIN_SUCCESS, LOGOUT } from "../actions/AuthActionTypes.js";
 
 const initialAuthState = {
-    token: localStorage.getItem("token"),
+    token: sessionStorage.getItem("token"),
     user: JSON.parse(localStorage.getItem("user") || "null"),
-    isAuthenticated: !!localStorage.getItem("token")
+    isAuthenticated: !!sessionStorage.getItem("token")
 };
 
 const AuthProvider = ({ children }) => {
@@ -18,7 +18,7 @@ const AuthProvider = ({ children }) => {
     );
 
     const loginSuccess = (token, user) => {
-        localStorage.setItem("token", token);
+        sessionStorage.setItem("token", token);
         localStorage.setItem(
             "user",
             JSON.stringify(user)
@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         localStorage.removeItem("user");
         dispatch({
             type: LOGOUT

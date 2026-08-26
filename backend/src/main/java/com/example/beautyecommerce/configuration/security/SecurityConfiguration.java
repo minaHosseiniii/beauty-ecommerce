@@ -9,12 +9,12 @@ import org.springframework.security.authentication.password.CompromisedPasswordC
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
@@ -45,7 +45,12 @@ public class SecurityConfiguration {
         http.httpBasic(Customizer.withDefaults());
         http.formLogin(Customizer.withDefaults());
         http.cors(cors -> cors.configurationSource(corsConfigurationSource));
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/v1/auth/login", "/api/v1/auth/register")
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+
+        );
+
 
         return http.build();
     }
@@ -67,7 +72,7 @@ public class SecurityConfiguration {
 
 
     private List<String> publicPaths() {
-        return List.of("/api/v1/products/**", "/api/v1/contacts/**", "/api/v1/auth/**");
+        return List.of("/api/v1/products/**", "/api/v1/contacts/**", "/api/v1/auth/**", "/api/v1/csrf");
     }
 
 }

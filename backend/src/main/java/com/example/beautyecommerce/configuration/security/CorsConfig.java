@@ -20,7 +20,7 @@ public class CorsConfig {
         );
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedHeaders(List.of("Content-type", "Authorization"));
+        corsConfiguration.setAllowedHeaders(List.of("Content-type", "Authorization", "X-XSRF-TOKEN"));
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return urlBasedCorsConfigurationSource;
