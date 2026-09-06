@@ -17,6 +17,7 @@ import Register from "../components/pages/Register.jsx";
 import {profileLoader} from "../loader/profile.loader.js";
 import Profile from "../components/pages/Profile.jsx";
 import {profileAction} from "../action/profile.action.js";
+import Checkout from "../components/pages/Checkout.jsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -35,6 +36,7 @@ export const router = createBrowserRouter(
             <Route path="products/:productId" element={<ProductDetails/>}
                    loader={productsDetailsLoader}/>
             <Route path="profile" element={<Profile/>} loader={profileLoader} action={profileAction}/>
+            <Route path="checkout" element={<Checkout/>} />
         </Route>
     )
 );

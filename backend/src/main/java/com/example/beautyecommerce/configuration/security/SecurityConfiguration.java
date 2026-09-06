@@ -9,6 +9,7 @@ import org.springframework.security.authentication.password.CompromisedPasswordC
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,22 +35,24 @@ public class SecurityConfiguration {
             request.requestMatchers("/api/v1/admin/**")
                     .hasRole("ADMIN");
 
-            request.requestMatchers("/api/v1/profile/**")
+            /*request.requestMatchers("/api/v1/profile/**")
                     .hasAnyRole("USER", "ADMIN");
 
             request.requestMatchers("/api/v1/address/**")
-                    .hasAnyRole("USER", "ADMIN");
+                    .hasAnyRole("USER", "ADMIN");*/
+            request.anyRequest().authenticated();
         });
 
         http.addFilterBefore(jwtTokenValidationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.httpBasic(Customizer.withDefaults());
-        http.formLogin(Customizer.withDefaults());
+        /*http.httpBasic(Customizer.withDefaults());
+        http.formLogin(Customizer.withDefaults());*/
         http.cors(cors -> cors.configurationSource(corsConfigurationSource));
-        http.csrf(csrf -> csrf
+        http.csrf(AbstractHttpConfigurer::disable);
+        /*http.csrf(csrf -> csrf
                 .ignoringRequestMatchers("/api/v1/auth/login", "/api/v1/auth/register")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 
-        );
+        );*/
 
 
         return http.build();

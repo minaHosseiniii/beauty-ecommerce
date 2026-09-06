@@ -68,12 +68,23 @@ const CartProvider = ({ children }) => {
 
     }, [cart]);
 
+    const totalPrice = useMemo(() => {
+
+        return cart.reduce(
+            (sum, item) =>
+                sum + item.price * item.quantity,
+            0
+        );
+
+    }, [cart]);
+
     const value = {
         cart,
         addToCart,
         removeFromCart,
         clearCart,
         totalQuantity,
+        totalPrice
     };
 
     return (

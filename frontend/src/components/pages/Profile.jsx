@@ -42,7 +42,7 @@ const Profile = () => {
 
     }, [actionData]);
 
-    const handleChange = (e) => {
+    const handlePersonalChange = (e) => {
 
         const { name, value } = e.target;
 
@@ -50,6 +50,28 @@ const Profile = () => {
             ...prev,
             [name]: value
         }));
+
+    };
+
+    const handleAddressChange = (index, e) => {
+
+        const { name, value } = e.target;
+
+        setProfileData(prev => {
+
+            const updatedAddresses = [...(prev.addressList || [])];
+
+            updatedAddresses[index] = {
+                ...updatedAddresses[index],
+                [name]: value
+            };
+
+            return {
+                ...prev,
+                addressList: updatedAddresses
+            };
+
+        });
 
     };
 
@@ -97,6 +119,8 @@ const Profile = () => {
                     "
                 >
 
+                    {/* Personal Details */}
+
                     <section>
 
                         <h2
@@ -119,7 +143,7 @@ const Profile = () => {
                                     type="text"
                                     name="name"
                                     value={profileData.name || ""}
-                                    onChange={handleChange}
+                                    onChange={handlePersonalChange}
                                     className={inputClass}
                                 />
 
@@ -139,7 +163,7 @@ const Profile = () => {
                                     type="email"
                                     name="email"
                                     value={profileData.email || ""}
-                                    onChange={handleChange}
+                                    onChange={handlePersonalChange}
                                     className={inputClass}
                                 />
 
@@ -159,7 +183,7 @@ const Profile = () => {
                                     type="text"
                                     name="mobileNumber"
                                     value={profileData.mobileNumber || ""}
-                                    onChange={handleChange}
+                                    onChange={handlePersonalChange}
                                     className={inputClass}
                                 />
 
@@ -175,93 +199,165 @@ const Profile = () => {
 
                     </section>
 
+
+                    {/* Address Details */}
+
                     <section>
 
-                        <h2
-                            className="
-                                text-xl
-                                font-semibold
-                                mb-6
-                            "
-                        >
-                            Address Details
-                        </h2>
+                        <div className="flex items-center justify-between mb-6">
 
-                        <div className="grid md:grid-cols-2 gap-6">
-
-                            <div>
-
-                                <label>Street</label>
-
-                                <input
-                                    type="text"
-                                    name="street"
-                                    value={profileData.street || ""}
-                                    onChange={handleChange}
-                                    className={inputClass}
-                                />
-
-                            </div>
-
-                            <div>
-
-                                <label>City</label>
-
-                                <input
-                                    type="text"
-                                    name="city"
-                                    value={profileData.city || ""}
-                                    onChange={handleChange}
-                                    className={inputClass}
-                                />
-
-                            </div>
-
-                            <div>
-
-                                <label>State</label>
-
-                                <input
-                                    type="text"
-                                    name="state"
-                                    value={profileData.state || ""}
-                                    onChange={handleChange}
-                                    className={inputClass}
-                                />
-
-                            </div>
-
-                            <div>
-
-                                <label>Postal Code</label>
-
-                                <input
-                                    type="text"
-                                    name="postalCode"
-                                    value={profileData.postalCode || ""}
-                                    onChange={handleChange}
-                                    className={inputClass}
-                                />
-
-                            </div>
-
-                            <div className="md:col-span-2">
-
-                                <label>Country</label>
-
-                                <input
-                                    type="text"
-                                    name="country"
-                                    value={profileData.country || ""}
-                                    onChange={handleChange}
-                                    className={inputClass}
-                                />
-
-                            </div>
+                            <h2
+                                className="
+                                    text-xl
+                                    font-semibold
+                                "
+                            >
+                                Address Details
+                            </h2>
 
                         </div>
 
+
+                        {(profileData.addressList || []).map(
+                            (address, index) => (
+
+                                <div
+                                    key={address.id ?? index}
+                                    className="
+                                        border
+                                        border-stone-200
+                                        dark:border-[#2B3328]
+                                        rounded-2xl
+                                        p-6
+                                        mb-6
+                                    "
+                                >
+
+                                    <h3
+                                        className="
+                                            font-semibold
+                                            mb-5
+                                        "
+                                    >
+                                        Address {index + 1}
+                                    </h3>
+
+                                    <div
+                                        className="
+                                            grid
+                                            md:grid-cols-2
+                                            gap-6
+                                        "
+                                    >
+
+                                        <div>
+
+                                            <label>Street</label>
+
+                                            <input
+                                                type="text"
+                                                name="street"
+                                                value={address.street || ""}
+                                                onChange={(e) =>
+                                                    handleAddressChange(
+                                                        index,
+                                                        e
+                                                    )
+                                                }
+                                                className={inputClass}
+                                            />
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <label>City</label>
+
+                                            <input
+                                                type="text"
+                                                name="city"
+                                                value={address.city || ""}
+                                                onChange={(e) =>
+                                                    handleAddressChange(
+                                                        index,
+                                                        e
+                                                    )
+                                                }
+                                                className={inputClass}
+                                            />
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <label>State</label>
+
+                                            <input
+                                                type="text"
+                                                name="state"
+                                                value={address.state || ""}
+                                                onChange={(e) =>
+                                                    handleAddressChange(
+                                                        index,
+                                                        e
+                                                    )
+                                                }
+                                                className={inputClass}
+                                            />
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <label>Postal Code</label>
+
+                                            <input
+                                                type="text"
+                                                name="postalCode"
+                                                value={address.postalCode || ""}
+                                                onChange={(e) =>
+                                                    handleAddressChange(
+                                                        index,
+                                                        e
+                                                    )
+                                                }
+                                                className={inputClass}
+                                            />
+
+                                        </div>
+
+
+                                        <div className="md:col-span-2">
+
+                                            <label>Country</label>
+
+                                            <input
+                                                type="text"
+                                                name="country"
+                                                value={address.country || ""}
+                                                onChange={(e) =>
+                                                    handleAddressChange(
+                                                        index,
+                                                        e
+                                                    )
+                                                }
+                                                className={inputClass}
+                                            />
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            )
+                        )}
+
                     </section>
+
 
                     <button
                         type="submit"

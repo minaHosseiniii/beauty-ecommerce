@@ -1,4 +1,3 @@
-import {StrictMode} from "react";
 import {createRoot} from "react-dom/client";
 import {RouterProvider} from "react-router-dom";
 import {router} from "./routes";
@@ -24,13 +23,11 @@ const stripePromise = loadStripe(
 );
 
 createRoot(document.getElementById("root")).render(
-    <StrictMode>
-        <Elements stripe={stripePromise}>
-            <AuthProvider>
-                <CartProvider>
-                    <RouterProvider router={router}/>
-                </CartProvider>
-            </AuthProvider>
-        </Elements>
-    </StrictMode>
+    <Elements stripe={stripePromise}>
+        <AuthProvider>
+            <CartProvider>
+                <RouterProvider router={router}/>
+            </CartProvider>
+        </AuthProvider>
+    </Elements>
 );

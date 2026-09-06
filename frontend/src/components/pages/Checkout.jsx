@@ -1,293 +1,499 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {
-    CardNumberElement,
-    CardExpiryElement,
     CardCvcElement,
+    CardExpiryElement,
+    CardNumberElement,
     useElements,
     useStripe,
 } from "@stripe/react-stripe-js";
+
+import UseCart from "../../store/hooks/UseCart";
+import {createPaymentIntent} from "../../api/payment.service.js";
 
 const Checkout = () => {
     const stripe = useStripe();
     const elements = useElements();
 
-    const [processing, setProcessing] = useState(false);
+    const {
+        cart,
+        totalPrice,
+        clearCart,
+    } = UseCart();
+
+    const [isDark, setIsDark] = useState(
+        document.documentElement.classList.contains("dark")
+    );
+
+    const [isProcessing, setIsProcessing] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
 
-    const [elementErrors, setElementErrors] = useState({
-        cardNumber: "",
-        cardExpiry: "",
-        cardCvc: "",
+    const [elementStates, setElementStates] = useState({
+        cardNumber: {
+            complete: false,
+            error: "",
+        },
+        cardExpiry: {
+            complete: false,
+            error: "",
+        },
+        cardCvc: {
+            complete: false,
+            error: "",
+        },
     });
 
-    const handleCardChange = (event, field) => {
-        setElementErrors((previous) => ({
-            ...previous,
-            [field]: event.error?.message || "",
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            setIsDark(
+                document.documentElement.classList.contains("dark")
+            );
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["class"],
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    const elementOptions = {
+        style: {
+            base: {
+                fontFamily: "Arial, sans-serif",
+                fontSize: "16px",
+                color: isDark ? "#FFFFFF" : "#000000",
+                fontSmoothing: "antialiased",
+                "::placeholder": {
+                    color: isDark ? "#9CA3AF" : "#6B7280",
+                },
+            },
+            invalid: {
+                color: "#dc2626",
+            },
+        },
+    };
+
+    const handleCardChange = (field, event) => {
+        setElementStates((prev) => ({
+            ...prev,
+            [field]: {
+                complete: event.complete,
+                error: event.error?.message || "",
+            },
         }));
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        setErrorMessage("");
-        setSuccessMessage("");
-
         if (!stripe || !elements) {
-            setErrorMessage("Stripe is not ready yet.");
             return;
         }
 
-        setProcessing(true);
+        if (!cart.length) {
+            setErrorMessage("Your cart is empty.");
+            return;
+        }
+
+        // Validate Stripe Elements before creating PaymentIntent
+        const hasElementErrors = Object.values(elementStates)
+            .some((state) => state.error);
+
+        if (hasElementErrors) {
+            setErrorMessage(
+                "Please correct your card information before continuing."
+            );
+            return;
+        }
+
+        // Make sure all Stripe Elements are complete
+        const areElementsComplete = Object.values(elementStates)
+            .every((state) => state.complete);
+
+        if (!areElementsComplete) {
+            setErrorMessage(
+                "Please complete your card information before continuing."
+            );
+            return;
+        }
+
+        setIsProcessing(true);
+        setErrorMessage("");
+        setSuccessMessage("");
 
         try {
+            const amount = Math.round(totalPrice * 100);
+
+            const data = await createPaymentIntent(
+                amount,
+                "usd"
+            );
+
+            console.log(
+                "CREATE PAYMENT INTENT RESPONSE:",
+                data
+            );
+
             const cardNumberElement =
                 elements.getElement(CardNumberElement);
 
             if (!cardNumberElement) {
-                setErrorMessage("Card information is not available.");
-                return;
+                throw new Error(
+                    "Card number element is not available."
+                );
             }
 
-            const result = await stripe.createPaymentMethod({
-                type: "card",
-                card: cardNumberElement,
-            });
+            const result =
+                await stripe.confirmCardPayment(
+                    data.clientSecret,
+                    {
+                        payment_method: {
+                            card: cardNumberElement,
+                        },
+                    }
+                );
+
+            console.log(
+                "CONFIRM PAYMENT RESULT:",
+                result
+            );
 
             if (result.error) {
                 setErrorMessage(result.error.message);
                 return;
             }
 
-            console.log("Payment Method:", result.paymentMethod);
+            if (
+                result.paymentIntent?.status ===
+                "succeeded"
+            ) {
+                clearCart();
 
-            const paymentMethodId = result.paymentMethod.id;
+                setSuccessMessage(
+                    "Payment successful!"
+                );
+            }
 
-            console.log("Payment Method ID:", paymentMethodId);
-
-            // TODO:
-            // Send paymentMethodId + order information
-            // to backend.
-
-            setSuccessMessage(
-                "Payment method created successfully."
-            );
         } catch (error) {
             console.error(error);
 
             setErrorMessage(
-                "Something went wrong while processing the payment."
+                error.response?.data?.message ||
+                error.message ||
+                "Payment failed."
             );
+
         } finally {
-            setProcessing(false);
+            setIsProcessing(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-light dark:bg-dark px-4 py-10">
-            <div className="mx-auto max-w-2xl">
+        <main className="
+            min-h-screen
+            bg-light
+            px-4
+            py-10
+            dark:bg-dark
+        ">
 
-                {/* Header */}
-                <div className="mb-8">
-                    <h1 className="text-3xl font-semibold text-dark dark:text-light">
-                        Checkout
-                    </h1>
+            <div className="mx-auto max-w-xl">
 
-                    <p className="mt-2 text-dark/70 dark:text-light/70">
-                        Enter your card details to continue with your
-                        payment.
-                    </p>
-                </div>
+                <h1 className="
+                    mb-3
+                    text-3xl
+                    font-bold
+                    text-dark
+                    dark:text-light
+                ">
+                    Complete your payment
+                </h1>
 
-                {/* Checkout Card */}
-                <div className="rounded-2xl bg-lighter p-6 shadow-lg dark:bg-dark">
+                <p className="
+                    mb-8
+                    text-dark/70
+                    dark:text-light/70
+                ">
+                    You will be charged $
+                    {totalPrice.toFixed(2)}
+                </p>
 
-                    <form onSubmit={handleSubmit}>
+                <form
+                    onSubmit={handleSubmit}
+                    className="
+                        space-y-6
+                        rounded-2xl
+                        bg-white
+                        p-6
+                        shadow-lg
+                        dark:border
+                        dark:border-gray-600
+                        dark:bg-[#353932]
+                    "
+                >
 
-                        {/* Card Number */}
-                        <div className="mb-6">
-                            <label
-                                htmlFor="card-number"
-                                className="mb-2 block text-sm font-semibold text-dark dark:text-light"
-                            >
-                                Card Number
-                            </label>
+                    {/* Success message */}
 
-                            <div
-                                className={`rounded-lg border p-3 ${
-                                    elementErrors.cardNumber
-                                        ? "border-red-500"
-                                        : "border-gray-300 dark:border-gray-600"
-                                }`}
-                            >
-                                <CardNumberElement
-                                    id="card-number"
-                                    onChange={(event) =>
-                                        handleCardChange(
-                                            event,
-                                            "cardNumber"
-                                        )
-                                    }
-                                    options={{
-                                        style: {
-                                            base: {
-                                                fontSize: "16px",
-                                                fontFamily:
-                                                    "Josefin Sans, sans-serif",
-                                                color: "#3F433B",
-                                                "::placeholder": {
-                                                    color: "#9CA3AF",
-                                                },
-                                            },
-                                            invalid: {
-                                                color: "#DC2626",
-                                            },
-                                        },
-                                    }}
-                                />
-                            </div>
-
-                            {elementErrors.cardNumber && (
-                                <p className="mt-2 text-sm text-red-500">
-                                    {elementErrors.cardNumber}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Expiry + CVC */}
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-
-                            {/* Expiry */}
-                            <div>
-                                <label
-                                    htmlFor="card-expiry"
-                                    className="mb-2 block text-sm font-semibold text-dark dark:text-light"
-                                >
-                                    Expiration Date
-                                </label>
-
-                                <div
-                                    className={`rounded-lg border p-3 ${
-                                        elementErrors.cardExpiry
-                                            ? "border-red-500"
-                                            : "border-gray-300 dark:border-gray-600"
-                                    }`}
-                                >
-                                    <CardExpiryElement
-                                        id="card-expiry"
-                                        onChange={(event) =>
-                                            handleCardChange(
-                                                event,
-                                                "cardExpiry"
-                                            )
-                                        }
-                                        options={{
-                                            style: {
-                                                base: {
-                                                    fontSize: "16px",
-                                                    fontFamily:
-                                                        "Josefin Sans, sans-serif",
-                                                    color: "#3F433B",
-                                                    "::placeholder": {
-                                                        color: "#9CA3AF",
-                                                    },
-                                                },
-                                                invalid: {
-                                                    color: "#DC2626",
-                                                },
-                                            },
-                                        }}
-                                    />
-                                </div>
-
-                                {elementErrors.cardExpiry && (
-                                    <p className="mt-2 text-sm text-red-500">
-                                        {elementErrors.cardExpiry}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* CVC */}
-                            <div>
-                                <label
-                                    htmlFor="card-cvc"
-                                    className="mb-2 block text-sm font-semibold text-dark dark:text-light"
-                                >
-                                    CVC
-                                </label>
-
-                                <div
-                                    className={`rounded-lg border p-3 ${
-                                        elementErrors.cardCvc
-                                            ? "border-red-500"
-                                            : "border-gray-300 dark:border-gray-600"
-                                    }`}
-                                >
-                                    <CardCvcElement
-                                        id="card-cvc"
-                                        onChange={(event) =>
-                                            handleCardChange(
-                                                event,
-                                                "cardCvc"
-                                            )
-                                        }
-                                        options={{
-                                            style: {
-                                                base: {
-                                                    fontSize: "16px",
-                                                    fontFamily:
-                                                        "Josefin Sans, sans-serif",
-                                                    color: "#3F433B",
-                                                    "::placeholder": {
-                                                        color: "#9CA3AF",
-                                                    },
-                                                },
-                                                invalid: {
-                                                    color: "#DC2626",
-                                                },
-                                            },
-                                        }}
-                                    />
-                                </div>
-
-                                {elementErrors.cardCvc && (
-                                    <p className="mt-2 text-sm text-red-500">
-                                        {elementErrors.cardCvc}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Error */}
-                        {errorMessage && (
-                            <div className="mt-6 rounded-lg bg-red-50 p-4 text-sm text-red-600">
-                                {errorMessage}
-                            </div>
-                        )}
-
-                        {/* Success */}
-                        {successMessage && (
-                            <div className="mt-6 rounded-lg bg-green-50 p-4 text-sm text-green-700">
+                    {successMessage && (
+                        <div className="
+                            flex
+                            items-center
+                            justify-between
+                            rounded-lg
+                            border
+                            border-green-300
+                            bg-green-100
+                            px-4
+                            py-3
+                            text-sm
+                            text-green-700
+                            dark:border-green-700
+                            dark:bg-green-900/30
+                            dark:text-green-300
+                        ">
+                            <span>
                                 {successMessage}
-                            </div>
+                            </span>
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setSuccessMessage("")
+                                }
+                                className="
+                                    ml-4
+                                    text-xl
+                                    font-bold
+                                    leading-none
+                                    text-green-700
+                                    transition
+                                    hover:opacity-60
+                                    dark:text-green-300
+                                "
+                                aria-label="Close"
+                            >
+                                ×
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Error message */}
+
+                    {errorMessage && (
+                        <div className="
+                            flex
+                            items-center
+                            justify-between
+                            rounded-lg
+                            border
+                            border-red-300
+                            bg-red-100
+                            px-4
+                            py-3
+                            text-sm
+                            text-red-700
+                            dark:border-red-700
+                            dark:bg-red-900/30
+                            dark:text-red-300
+                        ">
+                            <span>
+                                {errorMessage}
+                            </span>
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setErrorMessage("")
+                                }
+                                className="
+                                    ml-4
+                                    text-xl
+                                    font-bold
+                                    leading-none
+                                    text-red-700
+                                    transition
+                                    hover:opacity-60
+                                    dark:text-red-300
+                                "
+                                aria-label="Close"
+                            >
+                                ×
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Card Number */}
+
+                    <div>
+                        <label className="
+                            mb-2
+                            block
+                            font-semibold
+                            text-dark
+                            dark:text-light
+                        ">
+                            Card number
+                        </label>
+
+                        <div className="
+                            min-h-[50px]
+                            rounded-lg
+                            border-2
+                            border-gray-400
+                            bg-white
+                            p-4
+                            focus-within:border-primary
+                            dark:border-gray-500
+                            dark:bg-[#2d312b]
+                        ">
+                            <CardNumberElement
+                                options={elementOptions}
+                                onChange={(event) =>
+                                    handleCardChange(
+                                        "cardNumber",
+                                        event
+                                    )
+                                }
+                            />
+                        </div>
+
+                        {elementStates.cardNumber.error && (
+                            <p className="
+                                mt-2
+                                text-sm
+                                text-red-600
+                                dark:text-red-400
+                            ">
+                                {elementStates.cardNumber.error}
+                            </p>
                         )}
+                    </div>
 
-                        {/* Submit */}
-                        <button
-                            type="submit"
-                            disabled={!stripe || processing}
-                            className="mt-8 w-full rounded-lg bg-primary px-6 py-3 font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                            {processing
-                                ? "Processing..."
-                                : "Pay Now"}
-                        </button>
+                    {/* Expiry */}
 
-                    </form>
-                </div>
+                    <div>
+                        <label className="
+                            mb-2
+                            block
+                            font-semibold
+                            text-dark
+                            dark:text-light
+                        ">
+                            Expiry date
+                        </label>
+
+                        <div className="
+                            min-h-[50px]
+                            rounded-lg
+                            border-2
+                            border-gray-400
+                            bg-white
+                            p-4
+                            focus-within:border-primary
+                            dark:border-gray-500
+                            dark:bg-[#2d312b]
+                        ">
+                            <CardExpiryElement
+                                options={elementOptions}
+                                onChange={(event) =>
+                                    handleCardChange(
+                                        "cardExpiry",
+                                        event
+                                    )
+                                }
+                            />
+                        </div>
+
+                        {elementStates.cardExpiry.error && (
+                            <p className="
+                                mt-2
+                                text-sm
+                                text-red-600
+                                dark:text-red-400
+                            ">
+                                {elementStates.cardExpiry.error}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* CVC */}
+
+                    <div>
+                        <label className="
+                            mb-2
+                            block
+                            font-semibold
+                            text-dark
+                            dark:text-light
+                        ">
+                            CVC
+                        </label>
+
+                        <div className="
+                            min-h-[50px]
+                            rounded-lg
+                            border-2
+                            border-gray-400
+                            bg-white
+                            p-4
+                            focus-within:border-primary
+                            dark:border-gray-500
+                            dark:bg-[#2d312b]
+                        ">
+                            <CardCvcElement
+                                options={elementOptions}
+                                onChange={(event) =>
+                                    handleCardChange(
+                                        "cardCvc",
+                                        event
+                                    )
+                                }
+                            />
+                        </div>
+
+                        {elementStates.cardCvc.error && (
+                            <p className="
+                                mt-2
+                                text-sm
+                                text-red-600
+                                dark:text-red-400
+                            ">
+                                {elementStates.cardCvc.error}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Submit button */}
+
+                    <button
+                        type="submit"
+                        disabled={!stripe || isProcessing}
+                        className="
+                            w-full
+                            rounded-lg
+                            bg-primary
+                            px-6
+                            py-3
+                            font-semibold
+                            text-white
+                            transition
+                            hover:opacity-90
+                            disabled:cursor-not-allowed
+                            disabled:opacity-50
+                        "
+                    >
+                        {isProcessing
+                            ? "Payment processing..."
+                            : "Pay now"}
+                    </button>
+
+                </form>
+
             </div>
-        </div>
+
+        </main>
     );
 };
 

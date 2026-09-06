@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-import { useMemo } from "react";
+import {Link} from "react-router-dom";
+import {useMemo} from "react";
 
 import PageTitle from "../../components/pages/PageTitle";
 import CartTable from "./CartTable.jsx";
 import useCart from "../../store/hooks/UseCart";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingBasket } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faShoppingBasket} from "@fortawesome/free-solid-svg-icons";
 
 const Cart = () => {
-    const { cart } = useCart();
+    const {cart} = useCart();
 
     const isCartEmpty = useMemo(() => {
         return cart.length === 0;
@@ -18,13 +18,13 @@ const Cart = () => {
     return (
         <div className="max-w-5xl mx-auto px-6 py-14">
 
-            <PageTitle title="Your Cart" />
+            <PageTitle title="Your Cart"/>
 
             {
                 !isCartEmpty ? (
 
                     <>
-                        <CartTable />
+                        <CartTable/>
 
                         <div className="flex justify-between mt-8">
 
@@ -46,20 +46,19 @@ const Cart = () => {
                                 Back To Products
                             </Link>
 
-                            <button
+                            <Link
+                                to="/checkout"
                                 className="
-                                    px-6
-                                    py-3
-                                    rounded-xl
-                                    bg-primary
-                                    text-white
-                                    font-semibold
-                                    hover:opacity-90
-                                    transition
-                                "
-                            >
+                                        px-6
+                                        py-3
+                                        rounded-xl
+                                        bg-primary
+                                        text-white
+                                        font-semibold
+                                        hover:opacity-90
+                                        transition">
                                 Proceed To Checkout
-                            </button>
+                            </Link>
 
                         </div>
                     </>

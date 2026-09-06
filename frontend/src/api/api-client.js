@@ -21,7 +21,7 @@ apiClient.interceptors.request.use(async (config) => {
     }
 
     // CSRF
-    const safeMethods = ["GET", "HEAD", "OPTIONS"];
+    /*const safeMethods = ["GET", "HEAD", "OPTIONS"];
 
     if (!safeMethods.includes(config.method?.toUpperCase())) {
 
@@ -40,7 +40,7 @@ apiClient.interceptors.request.use(async (config) => {
 
         config.headers["X-XSRF-TOKEN"] = csrfToken;
     }
-
+*/
     return config;
 });
 
