@@ -1,5 +1,5 @@
- 
-name: ‌Backend CI
+name: Backend CI
+
 on:
   push:
 
@@ -16,7 +16,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Maven test
-      - run: mvn clean test -e
+        run: mvn clean test -e
         working-directory: ./backend
 
       - run: mvn package
