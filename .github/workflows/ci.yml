@@ -15,6 +15,13 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Check Java and Maven
+        run: |
+          java -version
+          mvn -version
+          ls -la
+        working-directory: ./backend
+
       - name: Maven test
         run: mvn clean test -e
         working-directory: ./backend
