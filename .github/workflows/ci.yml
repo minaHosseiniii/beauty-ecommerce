@@ -14,10 +14,10 @@ jobs:
                 MYSQL_ROOT_PASSWORD: root
                 MYSQL_DATABASE: BeautyStoreDB
             ports:
-                -3306:3306
+                - 3306:3306
             options: >-
                 --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
-                --health-intervla=10s
+                --health-intervals=10s
                 --health-timeout=5s
                 --health-retries=5
 
@@ -33,7 +33,7 @@ jobs:
       - run: mvn test
         working-directory: ./backend
         env:
-            SPRING_DATABASE_URL: jdbc:mysql://localhost:3306/BeautyStoreDB
+            SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/BeautyStoreDB
             SPRING_DATASOURCE_USERNAME: root
             SPRING_DATASOURCE_PASSWORD: root
 
