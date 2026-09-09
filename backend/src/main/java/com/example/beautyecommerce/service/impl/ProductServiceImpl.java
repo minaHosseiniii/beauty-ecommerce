@@ -1,6 +1,7 @@
 package com.example.beautyecommerce.service.impl;
 
 import com.example.beautyecommerce.dto.ProductDTO;
+import com.example.beautyecommerce.entity.Product;
 import com.example.beautyecommerce.mapper.ProductMapper;
 import com.example.beautyecommerce.repository.ProductRepository;
 import com.example.beautyecommerce.service.ProductService;
@@ -23,6 +24,11 @@ public class ProductServiceImpl implements ProductService {
                 .findById(id)
                 .map(productMapper::toProductDTO)
                 .orElseThrow(() -> new RuntimeException("product not found"));
+    }
+
+    @Override
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("product not found"));
     }
 
     @Override

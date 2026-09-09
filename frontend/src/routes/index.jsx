@@ -17,7 +17,7 @@ import Register from "../components/pages/Register.jsx";
 import {profileLoader} from "../loader/profile.loader.js";
 import Profile from "../components/pages/Profile.jsx";
 import {profileAction} from "../action/profile.action.js";
-import Checkout from "../components/pages/Checkout.jsx";
+import Checkout from "../components/pages/checkout/Checkout.jsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(

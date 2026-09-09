@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,4 +20,5 @@ public class OrderDTO {
     private String paymentId;
     private String paymentStatus;
     private Instant createdAt;
+    private List<OrderItemDTO> items;
 }

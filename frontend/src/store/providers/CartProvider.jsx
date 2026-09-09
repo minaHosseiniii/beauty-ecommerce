@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useReducer } from "react";
 
-import CartContext from "../contexts/CartContext";
+import CartContext from "../contexts/CartContext.js";
 
 import { cartReducer } from "../reducers/cartReducer";
 

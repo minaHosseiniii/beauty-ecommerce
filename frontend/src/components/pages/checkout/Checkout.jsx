@@ -1,14 +1,9 @@
 import {useEffect, useState} from "react";
-import {
-    CardCvcElement,
-    CardExpiryElement,
-    CardNumberElement,
-    useElements,
-    useStripe,
-} from "@stripe/react-stripe-js";
+import {CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe,} from "@stripe/react-stripe-js";
 
-import UseCart from "../../store/hooks/UseCart";
-import {createPaymentIntent} from "../../api/payment.service.js";
+import UseCart from "../../../store/hooks/UseCart.jsx";
+import {createPaymentIntent} from "../../../api/payment.service.js";
+import {createOrder} from "../../../api/order.service.js";
 
 const Checkout = () => {
     const stripe = useStripe();
@@ -169,6 +164,24 @@ const Checkout = () => {
                 result.paymentIntent?.status ===
                 "succeeded"
             ) {
+                const orderData = {
+                    totalPrice: totalPrice,
+                    paymentId: result.paymentIntent.id,
+                    paymentStatus: result.paymentIntent.status,
+                    items: cart.map((item) => ({
+                        productId: item.id,
+                        quantity: item.quantity,
+                        price: item.price,
+                    })),
+                };
+
+                const order = await createOrder(orderData);
+
+                console.log(
+                    "CREATE ORDER RESPONSE:",
+                    order
+                );
+
                 clearCart();
 
                 setSuccessMessage(
