@@ -33,6 +33,7 @@ jobs:
       - run: mvn test
         working-directory: ./backend
         env:
+            SPRING_PROFILES_ACTIVE: test
             SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/BeautyStoreDB
             SPRING_DATASOURCE_USERNAME: root
             SPRING_DATASOURCE_PASSWORD: root

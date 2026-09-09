@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS products
     );
 
 
-CREATE IF NOT EXISTS TABLE contacts (
+CREATE TABLE IF NOT EXISTS contacts (
                           contact_id BIGINT AUTO_INCREMENT PRIMARY KEY,
                           name VARCHAR(100),
                           email VARCHAR(100),
@@ -26,7 +26,7 @@ CREATE IF NOT EXISTS TABLE contacts (
 );
 
 
-CREATE TABLE IF NOT EXISTS customers (
+CREATE TABLE IF NOT EXISTS users (
                            customer_id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
                            name VARCHAR(100) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT  EXISTS address (
 
                          CONSTRAINT fk_address_customer
                              FOREIGN KEY(customer_id)
-                                 REFERENCES customers(customer_id)
+                                 REFERENCES users(customer_id)
                                  ON DELETE CASCADE
 );
 
@@ -81,9 +81,5 @@ create table if not exists permissions (permission_id bigint not null auto_incre
     created_by varchar(255) not null, updated_at datetime(6), updated_by varchar(255), permission_name varchar(255), primary key (permission_id));
 
 create table if not exists role_permission (role_id bigint not null, permission_id bigint not null, primary key (role_id, permission_id));
-
-alter table address add constraint FK7yr5kssqvyt2qgksu8mf3pnli foreign key (customer_id) references users (customer_id);
-alter table customer_role add constraint FKhfpoop4wxkxlxtlm6j6pqa827 foreign key (role_id) references roles (role_id);
-alter table customer_role add constraint FKsw5xcsnlj86ywlmagex1vfroe foreign key (customer_id) references users (customer_id);
 alter table role_permission add constraint FK2xn8qv4vw30i04xdxrpvn3bdi foreign key (permission_id) references permissions (permission_id);
 alter table role_permission add constraint FKtfgq8q9blrp0pt1pvggyli3v9 foreign key (role_id) references roles (role_id);
