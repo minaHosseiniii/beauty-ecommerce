@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import {CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe,} from "@stripe/react-stripe-js";
 
 import UseCart from "../../../store/hooks/UseCart.jsx";
@@ -8,6 +9,7 @@ import {createOrder} from "../../../api/order.service.js";
 const Checkout = () => {
     const stripe = useStripe();
     const elements = useElements();
+    const navigate = useNavigate();
 
     const {
         cart,
@@ -184,9 +186,11 @@ const Checkout = () => {
 
                 clearCart();
 
-                setSuccessMessage(
-                    "Payment successful!"
-                );
+                navigate("/order-success", {
+                    state: {
+                        orderId: order.id,
+                    },
+                });
             }
 
         } catch (error) {

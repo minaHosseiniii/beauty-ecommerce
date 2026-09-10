@@ -6,6 +6,7 @@ import com.example.beautyecommerce.entity.Customer;
 import com.example.beautyecommerce.entity.Order;
 import com.example.beautyecommerce.entity.OrderItem;
 import com.example.beautyecommerce.entity.Product;
+import com.example.beautyecommerce.exceptions.ValidationException;
 import com.example.beautyecommerce.mapper.OrderMapper;
 import com.example.beautyecommerce.repository.OrderRepository;
 import com.example.beautyecommerce.service.CustomerService;
@@ -44,5 +45,11 @@ public class OrderServiceImpl implements OrderService {
         order.setItems(orderItems);
         Order savedOrder = orderRepository.save(order);
         return orderMapper.toOrderDTO(savedOrder);
+    }
+
+    @Override
+    public OrderDTO findById(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+        return orderMapper.toOrderDTO(order);
     }
 }

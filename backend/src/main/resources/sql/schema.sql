@@ -80,6 +80,60 @@ create table if not exists customer_role (customer_id bigint not null, role_id b
 create table if not exists permissions (permission_id bigint not null auto_increment, created_at datetime(6) not null,
     created_by varchar(255) not null, updated_at datetime(6), updated_by varchar(255), permission_name varchar(255), primary key (permission_id));
 
-create table if not exists role_permission (role_id bigint not null, permission_id bigint not null, primary key (role_id, permission_id));
-alter table role_permission add constraint FK2xn8qv4vw30i04xdxrpvn3bdi foreign key (permission_id) references permissions (permission_id);
-alter table role_permission add constraint FKtfgq8q9blrp0pt1pvggyli3v9 foreign key (role_id) references roles (role_id);
+CREATE TABLE IF NOT EXISTS role_permission
+(
+    role_id       BIGINT NOT NULL,
+    permission_id BIGINT NOT NULL,
+
+    PRIMARY KEY (role_id, permission_id),
+
+    CONSTRAINT fk_role_permission_role
+    FOREIGN KEY (role_id)
+    REFERENCES roles(role_id),
+
+    CONSTRAINT fk_role_permission_permission
+    FOREIGN KEY (permission_id)
+    REFERENCES permissions(permission_id)
+    );
+
+CREATE TABLE IF NOT EXISTS orders
+(
+    id             BIGINT AUTO_INCREMENT PRIMARY KEY,
+    customer_id    BIGINT         NOT NULL,
+    total_price    DECIMAL(10, 2) NOT NULL,
+    payment_id     VARCHAR(255)   NOT NULL,
+    payment_status VARCHAR(255)   NOT NULL,
+
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_by     VARCHAR(255) NOT NULL,
+    updated_at     TIMESTAMP DEFAULT NULL,
+    updated_by     VARCHAR(255) DEFAULT NULL,
+
+    CONSTRAINT fk_order_customer
+    FOREIGN KEY (customer_id)
+    REFERENCES users(customer_id)
+    );
+
+
+
+CREATE TABLE IF NOT EXISTS order_items
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id   BIGINT         NOT NULL,
+    product_id BIGINT         NOT NULL,
+    quantity   INT            NOT NULL,
+    price      DECIMAL(10, 2) NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_by VARCHAR(255) NOT NULL,
+    updated_at TIMESTAMP DEFAULT NULL,
+    updated_by VARCHAR(255) DEFAULT NULL,
+
+    CONSTRAINT fk_order_item_order
+    FOREIGN KEY (order_id)
+    REFERENCES orders(id),
+
+    CONSTRAINT fk_order_item_product
+    FOREIGN KEY (product_id)
+    REFERENCES products(product_id)
+    );

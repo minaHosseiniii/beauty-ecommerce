@@ -18,6 +18,7 @@ import {profileLoader} from "../loader/profile.loader.js";
 import Profile from "../components/pages/Profile.jsx";
 import {profileAction} from "../action/profile.action.js";
 import Checkout from "../components/pages/checkout/Checkout.jsx";
+import OrderSuccess from "../components/pages/checkout/OrderSuccess.jsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -37,6 +38,7 @@ export const router = createBrowserRouter(
                    loader={productsDetailsLoader}/>
             <Route path="profile" element={<Profile/>} loader={profileLoader} action={profileAction}/>
             <Route path="checkout" element={<Checkout/>} />
+            <Route path="order-success" element={<OrderSuccess/>} />
         </Route>
     )
 );
