@@ -55,23 +55,31 @@ public class ProfileServiceImpl implements ProfileService {
                 .build();
         customerService.updateCustomer(customerDTO);
 
-        for (AddressDTO addressDTO : dto.getAddresses()) {
-            if (addressDTO.getId() == null) {
-                addressService.createAddress(addressDTO);
-            } else {
-                addressService.updateAddress(addressDTO);
-            }
-        }
-
         Set<Long> requestedAddressIds = dto.getAddresses().stream()
                 .map(AddressDTO::getId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
+        for (AddressDTO addressDTO : dto.getAddresses()) {
+
+            if (addressDTO.getId() == null) {
+
+                AddressDTO createdAddress =
+                        addressService.createAddress(addressDTO);
+
+                requestedAddressIds.add(createdAddress.getId());
+
+            } else {
+
+                addressService.updateAddress(addressDTO);
+            }
+        }
+
         List<Address> existingAddresses =
                 addressService.findByCustomerId(customer.getCustomerId());
 
         for (Address address : existingAddresses) {
+
             if (!requestedAddressIds.contains(address.getId())) {
                 addressService.deleteAddress(address.getId());
             }
