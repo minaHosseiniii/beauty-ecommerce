@@ -196,7 +196,7 @@
                     </from>
 
                     <to>
-                        <image>ghcr.io/minaHosseiniii/beauty-ecommerce</image>
+                        <image>ghcr.io/minahosseiniii/beauty-ecommerce</image>
                     </to>
                 </configuration>
             </plugin>
