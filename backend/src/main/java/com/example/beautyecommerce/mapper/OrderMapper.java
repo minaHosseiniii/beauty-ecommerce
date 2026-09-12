@@ -4,7 +4,7 @@ import com.example.beautyecommerce.dto.OrderDTO;
 import com.example.beautyecommerce.entity.Order;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = OrderItemMapper.class)
 public interface OrderMapper {
      Order toOrder(OrderDTO orderDTO);
 

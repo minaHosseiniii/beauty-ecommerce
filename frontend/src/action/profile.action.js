@@ -1,8 +1,12 @@
 import profileService from "../api/profile.service.js";
 
-export async function profileAction({request}) {
+export async function profileAction({ request }) {
 
     const formData = await request.formData();
+
+    const addresses = JSON.parse(
+        formData.get("addresses") || "[]"
+    );
 
     const profile = {
 
@@ -12,41 +16,32 @@ export async function profileAction({request}) {
 
         mobileNumber: formData.get("mobileNumber"),
 
-        street: formData.get("street"),
-
-        city: formData.get("city"),
-
-        state: formData.get("state"),
-
-        postalCode: formData.get("postalCode"),
-
-        country: formData.get("country")
+        addresses: addresses
 
     };
 
     try {
 
-        const response = await profileService.updateProfile(profile);
+        const response =
+            await profileService.updateProfile(profile);
 
         return {
 
-            success:true,
+            success: true,
 
-            profileData:response.data
+            profileData: response.data
 
         };
 
-    }
+    } catch (e) {
 
-    catch(e){
+        if (e.response?.status === 400) {
 
-        if(e.response?.status===400){
+            return {
 
-            return{
+                success: false,
 
-                success:false,
-
-                errors:e.response.data
+                errors: e.response.data
 
             };
 

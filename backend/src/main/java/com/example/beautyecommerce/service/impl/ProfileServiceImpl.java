@@ -68,7 +68,10 @@ public class ProfileServiceImpl implements ProfileService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        for (Address address : customer.getAddresses()) {
+        List<Address> existingAddresses =
+                addressService.findByCustomerId(customer.getCustomerId());
+
+        for (Address address : existingAddresses) {
             if (!requestedAddressIds.contains(address.getId())) {
                 addressService.deleteAddress(address.getId());
             }

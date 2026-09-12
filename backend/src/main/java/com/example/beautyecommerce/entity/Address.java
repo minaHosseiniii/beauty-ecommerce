@@ -20,7 +20,6 @@ public class Address {
     @Column(name = "address_id")
     private Long id;
 
-    @NotBlank
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;

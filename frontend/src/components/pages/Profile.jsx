@@ -24,6 +24,7 @@ const Profile = () => {
     const [errors, setErrors] =
         useState({});
 
+
     useEffect(() => {
 
         if (!actionData) return;
@@ -42,6 +43,7 @@ const Profile = () => {
 
     }, [actionData]);
 
+
     const handlePersonalChange = (e) => {
 
         const { name, value } = e.target;
@@ -53,13 +55,16 @@ const Profile = () => {
 
     };
 
+
     const handleAddressChange = (index, e) => {
 
         const { name, value } = e.target;
 
         setProfileData(prev => {
 
-            const updatedAddresses = [...(prev.addressList || [])];
+            const updatedAddresses = [
+                ...(prev.addressList || [])
+            ];
 
             updatedAddresses[index] = {
                 ...updatedAddresses[index],
@@ -75,6 +80,51 @@ const Profile = () => {
 
     };
 
+
+    const handleAddAddress = () => {
+
+        setProfileData(prev => ({
+
+            ...prev,
+
+            addressList: [
+                ...(prev.addressList || []),
+
+                {
+                    id: null,
+                    street: "",
+                    city: "",
+                    state: "",
+                    postalCode: "",
+                    country: ""
+                }
+            ]
+
+        }));
+
+    };
+
+
+    const handleRemoveAddress = (index) => {
+
+        setProfileData(prev => {
+
+            const updatedAddresses = [
+                ...(prev.addressList || [])
+            ];
+
+            updatedAddresses.splice(index, 1);
+
+            return {
+                ...prev,
+                addressList: updatedAddresses
+            };
+
+        });
+
+    };
+
+
     const inputClass = `
         w-full
         rounded-xl
@@ -89,8 +139,10 @@ const Profile = () => {
         focus:border-primary
     `;
 
+
     const errorClass =
         "text-red-500 text-sm mt-1";
+
 
     return (
 
@@ -106,7 +158,21 @@ const Profile = () => {
                 My Profile
             </h1>
 
+
             <Form method="put">
+
+                {/*
+                    ProfileRequestDTO expects "addresses".
+                    The response uses "addressList".
+                */}
+                <input
+                    type="hidden"
+                    name="addresses"
+                    value={JSON.stringify(
+                        profileData.addressList || []
+                    )}
+                />
+
 
                 <div
                     className="
@@ -133,6 +199,7 @@ const Profile = () => {
                             Personal Details
                         </h2>
 
+
                         <div className="grid md:grid-cols-2 gap-6">
 
                             <div>
@@ -142,7 +209,9 @@ const Profile = () => {
                                 <input
                                     type="text"
                                     name="name"
-                                    value={profileData.name || ""}
+                                    value={
+                                        profileData.name || ""
+                                    }
                                     onChange={handlePersonalChange}
                                     className={inputClass}
                                 />
@@ -155,6 +224,7 @@ const Profile = () => {
 
                             </div>
 
+
                             <div>
 
                                 <label>Email</label>
@@ -162,7 +232,9 @@ const Profile = () => {
                                 <input
                                     type="email"
                                     name="email"
-                                    value={profileData.email || ""}
+                                    value={
+                                        profileData.email || ""
+                                    }
                                     onChange={handlePersonalChange}
                                     className={inputClass}
                                 />
@@ -175,6 +247,7 @@ const Profile = () => {
 
                             </div>
 
+
                             <div>
 
                                 <label>Mobile Number</label>
@@ -182,7 +255,9 @@ const Profile = () => {
                                 <input
                                     type="text"
                                     name="mobileNumber"
-                                    value={profileData.mobileNumber || ""}
+                                    value={
+                                        profileData.mobileNumber || ""
+                                    }
                                     onChange={handlePersonalChange}
                                     className={inputClass}
                                 />
@@ -204,7 +279,14 @@ const Profile = () => {
 
                     <section>
 
-                        <div className="flex items-center justify-between mb-6">
+                        <div
+                            className="
+                                flex
+                                items-center
+                                justify-between
+                                mb-6
+                            "
+                        >
 
                             <h2
                                 className="
@@ -215,7 +297,62 @@ const Profile = () => {
                                 Address Details
                             </h2>
 
+
+                            <button
+                                type="button"
+                                onClick={handleAddAddress}
+                                className="
+                                    bg-primary
+                                    text-white
+                                    px-4
+                                    py-2
+                                    rounded-xl
+                                    hover:opacity-90
+                                "
+                            >
+                                + Add Address
+                            </button>
+
                         </div>
+
+
+                        {(profileData.addressList || []).length === 0 && (
+
+                            <div
+                                className="
+                                    border
+                                    border-dashed
+                                    border-stone-300
+                                    dark:border-[#2B3328]
+                                    rounded-2xl
+                                    p-8
+                                    text-center
+                                    text-stone-500
+                                    dark:text-stone-400
+                                "
+                            >
+                                <p className="mb-4">
+                                    You don't have any addresses yet.
+                                </p>
+
+                                <button
+                                    type="button"
+                                    onClick={handleAddAddress}
+                                    className="
+                                        bg-primary
+                                        text-white
+                                        px-5
+                                        py-2
+                                        rounded-xl
+                                        hover:opacity-90
+                                    "
+                                >
+                                    Add your first address
+                                </button>
+
+                            </div>
+
+                        )}
 
 
                         {(profileData.addressList || []).map(
@@ -233,14 +370,40 @@ const Profile = () => {
                                     "
                                 >
 
-                                    <h3
+                                    <div
                                         className="
-                                            font-semibold
+                                            flex
+                                            items-center
+                                            justify-between
                                             mb-5
                                         "
                                     >
-                                        Address {index + 1}
-                                    </h3>
+
+                                        <h3
+                                            className="
+                                                font-semibold
+                                            "
+                                        >
+                                            Address {index + 1}
+                                        </h3>
+
+
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                handleRemoveAddress(index)
+                                            }
+                                            className="
+                                                text-red-500
+                                                text-sm
+                                                hover:underline
+                                            "
+                                        >
+                                            Remove
+                                        </button>
+
+                                    </div>
+
 
                                     <div
                                         className="
@@ -250,6 +413,8 @@ const Profile = () => {
                                         "
                                     >
 
+                                        {/* Street */}
+
                                         <div>
 
                                             <label>Street</label>
@@ -257,7 +422,9 @@ const Profile = () => {
                                             <input
                                                 type="text"
                                                 name="street"
-                                                value={address.street || ""}
+                                                value={
+                                                    address.street || ""
+                                                }
                                                 onChange={(e) =>
                                                     handleAddressChange(
                                                         index,
@@ -269,6 +436,8 @@ const Profile = () => {
 
                                         </div>
 
+
+                                        {/* City */}
 
                                         <div>
 
@@ -277,7 +446,9 @@ const Profile = () => {
                                             <input
                                                 type="text"
                                                 name="city"
-                                                value={address.city || ""}
+                                                value={
+                                                    address.city || ""
+                                                }
                                                 onChange={(e) =>
                                                     handleAddressChange(
                                                         index,
@@ -289,6 +460,8 @@ const Profile = () => {
 
                                         </div>
 
+
+                                        {/* State */}
 
                                         <div>
 
@@ -297,7 +470,9 @@ const Profile = () => {
                                             <input
                                                 type="text"
                                                 name="state"
-                                                value={address.state || ""}
+                                                value={
+                                                    address.state || ""
+                                                }
                                                 onChange={(e) =>
                                                     handleAddressChange(
                                                         index,
@@ -309,6 +484,8 @@ const Profile = () => {
 
                                         </div>
 
+
+                                        {/* Postal Code */}
 
                                         <div>
 
@@ -317,7 +494,9 @@ const Profile = () => {
                                             <input
                                                 type="text"
                                                 name="postalCode"
-                                                value={address.postalCode || ""}
+                                                value={
+                                                    address.postalCode || ""
+                                                }
                                                 onChange={(e) =>
                                                     handleAddressChange(
                                                         index,
@@ -330,6 +509,8 @@ const Profile = () => {
                                         </div>
 
 
+                                        {/* Country */}
+
                                         <div className="md:col-span-2">
 
                                             <label>Country</label>
@@ -337,7 +518,9 @@ const Profile = () => {
                                             <input
                                                 type="text"
                                                 name="country"
-                                                value={address.country || ""}
+                                                value={
+                                                    address.country || ""
+                                                }
                                                 onChange={(e) =>
                                                     handleAddressChange(
                                                         index,
@@ -358,6 +541,8 @@ const Profile = () => {
 
                     </section>
 
+
+                    {/* Save */}
 
                     <button
                         type="submit"
