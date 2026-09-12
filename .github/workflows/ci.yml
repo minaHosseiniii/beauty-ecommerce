@@ -39,5 +39,5 @@ jobs:
             SPRING_DATASOURCE_PASSWORD: root
             LOCAL_STRIPE_SECRET_KEY: test_stripe_key
 
-      - run: mvn package -DskipTests jib:dockerBuild
+      - run: mvn package -DskipTests jib:build
         working-directory: ./backend
