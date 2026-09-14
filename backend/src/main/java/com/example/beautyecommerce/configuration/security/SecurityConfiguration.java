@@ -1,6 +1,8 @@
 package com.example.beautyecommerce.configuration.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,30 +30,26 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> {
-            publicPaths().forEach(path -> request.requestMatchers(path).permitAll());
+            publicPaths().forEach(path ->
+                    request.requestMatchers(path).permitAll()
+            );
+
+            request.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
+                    .permitAll();
 
             request.requestMatchers("/api/v1/admin/**")
                     .hasRole("ADMIN");
 
-            /*request.requestMatchers("/api/v1/profile/**")
-                    .hasAnyRole("USER", "ADMIN");
-
-            request.requestMatchers("/api/v1/address/**")
-                    .hasAnyRole("USER", "ADMIN");*/
             request.anyRequest().authenticated();
         });
 
-        http.addFilterBefore(jwtTokenValidationFilter, UsernamePasswordAuthenticationFilter.class);
-        /*http.httpBasic(Customizer.withDefaults());
-        http.formLogin(Customizer.withDefaults());*/
+        http.addFilterBefore(
+                jwtTokenValidationFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
+
         http.cors(cors -> cors.configurationSource(corsConfigurationSource));
         http.csrf(AbstractHttpConfigurer::disable);
-        /*http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/v1/auth/login", "/api/v1/auth/register")
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-
-        );*/
-
 
         return http.build();
     }
@@ -73,7 +71,7 @@ public class SecurityConfiguration {
 
 
     private List<String> publicPaths() {
-        return List.of("/api/v1/products/**", "/api/v1/contacts/**", "/api/v1/auth/**", "/api/v1/csrf", "/actuator/health", "/actuator/health/**");
+        return List.of("/api/v1/products/**", "/api/v1/contacts/**", "/api/v1/auth/**", "/api/v1/csrf");
     }
 
 }
