@@ -48,4 +48,9 @@ public class Address {
     @NotBlank
     @Column(nullable = false, length = 100)
     private String country;
+
+    @Size(max = 100)
+    @NotBlank
+    @Column(nullable = false, length = 100)
+    private String label;
 }

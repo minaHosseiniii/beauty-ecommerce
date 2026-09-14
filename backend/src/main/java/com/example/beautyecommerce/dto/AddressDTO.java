@@ -27,4 +27,7 @@ public class AddressDTO {
     @NotBlank
     @Pattern(regexp = "\\d{10}")
     private String postalCode;
+    @NotBlank
+    @Size(min = 3, max = 100)
+    private String label;
 }

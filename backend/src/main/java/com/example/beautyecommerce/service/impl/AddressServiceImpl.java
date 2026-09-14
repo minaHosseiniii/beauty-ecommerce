@@ -26,8 +26,6 @@ public class AddressServiceImpl implements AddressService {
     @Transactional
     public AddressDTO createAddress(AddressDTO addressDTO) {
         Address address = addressMapper.toAddress(addressDTO);
-        System.out.println("CREATE ADDRESS DTO: " + addressDTO);
-        System.out.println("CREATE ADDRESS: " + address);
         Customer authenticatedCustomer = customerService.getAuthenticatedCustomer();
         address.setCustomer(authenticatedCustomer);
         Address savedAddress = addressRepository.save(address);
@@ -60,6 +58,7 @@ public class AddressServiceImpl implements AddressService {
             address.setState(addressDTO.getState());
             address.setStreet(addressDTO.getStreet());
             address.setPostalCode(addressDTO.getPostalCode());
+            address.setLabel(addressDTO.getLabel());
         }
     }
 

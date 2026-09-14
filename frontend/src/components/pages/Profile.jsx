@@ -96,7 +96,8 @@ const Profile = () => {
                     city: "",
                     state: "",
                     postalCode: "",
-                    country: ""
+                    country: "",
+                    label: ""
                 }
             ]
 
@@ -126,17 +127,17 @@ const Profile = () => {
 
 
     const inputClass = `
-        w-full
-        rounded-xl
-        border
-        border-stone-300
-        dark:border-[#2B3328]
-        bg-white
-        dark:bg-[#1F241D]
-        px-4
-        py-3
-        outline-none
-        focus:border-primary
+w-full
+rounded-xl
+border
+border-stone-300
+dark:border-[#2B3328]
+bg-white
+dark:bg-[#1F241D]
+px-4
+py-3
+outline-none
+focus:border-primary
     `;
 
 
@@ -331,6 +332,7 @@ const Profile = () => {
                                     dark:text-stone-400
                                 "
                             >
+
                                 <p className="mb-4">
                                     You don't have any addresses yet.
                                 </p>
@@ -413,11 +415,46 @@ const Profile = () => {
                                         "
                                     >
 
+                                        {/* Label */}
+
+                                        <div>
+
+                                            <label>
+                                                Label{" "}
+                                                <span className="text-red-500">
+                                                    *
+                                                </span>
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                name="label"
+                                                value={
+                                                    address.label || ""
+                                                }
+                                                onChange={(e) =>
+                                                    handleAddressChange(
+                                                        index,
+                                                        e
+                                                    )
+                                                }
+                                                required
+                                                className={inputClass}
+                                            />
+
+                                        </div>
+
+
                                         {/* Street */}
 
                                         <div>
 
-                                            <label>Street</label>
+                                            <label>
+                                                Street{" "}
+                                                <span className="text-red-500">
+                                                    *
+                                                </span>
+                                            </label>
 
                                             <input
                                                 type="text"
@@ -431,6 +468,7 @@ const Profile = () => {
                                                         e
                                                     )
                                                 }
+                                                required
                                                 className={inputClass}
                                             />
 
@@ -441,7 +479,12 @@ const Profile = () => {
 
                                         <div>
 
-                                            <label>City</label>
+                                            <label>
+                                                City{" "}
+                                                <span className="text-red-500">
+                                                    *
+                                                </span>
+                                            </label>
 
                                             <input
                                                 type="text"
@@ -455,6 +498,7 @@ const Profile = () => {
                                                         e
                                                     )
                                                 }
+                                                required
                                                 className={inputClass}
                                             />
 
@@ -465,7 +509,12 @@ const Profile = () => {
 
                                         <div>
 
-                                            <label>State</label>
+                                            <label>
+                                                State{" "}
+                                                <span className="text-red-500">
+                                                    *
+                                                </span>
+                                            </label>
 
                                             <input
                                                 type="text"
@@ -479,6 +528,7 @@ const Profile = () => {
                                                         e
                                                     )
                                                 }
+                                                required
                                                 className={inputClass}
                                             />
 
@@ -489,7 +539,12 @@ const Profile = () => {
 
                                         <div>
 
-                                            <label>Postal Code</label>
+                                            <label>
+                                                Postal Code{" "}
+                                                <span className="text-red-500">
+                                                    *
+                                                </span>
+                                            </label>
 
                                             <input
                                                 type="text"
@@ -503,6 +558,7 @@ const Profile = () => {
                                                         e
                                                     )
                                                 }
+                                                required
                                                 className={inputClass}
                                             />
 
@@ -513,7 +569,12 @@ const Profile = () => {
 
                                         <div className="md:col-span-2">
 
-                                            <label>Country</label>
+                                            <label>
+                                                Country{" "}
+                                                <span className="text-red-500">
+                                                    *
+                                                </span>
+                                            </label>
 
                                             <input
                                                 type="text"
@@ -527,6 +588,7 @@ const Profile = () => {
                                                         e
                                                     )
                                                 }
+                                                required
                                                 className={inputClass}
                                             />
 

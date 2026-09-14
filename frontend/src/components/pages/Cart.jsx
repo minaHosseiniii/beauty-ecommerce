@@ -1,9 +1,12 @@
 import {Link} from "react-router-dom";
-import {useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import PageTitle from "../../components/pages/PageTitle";
 import CartTable from "./CartTable.jsx";
+import AddressTable from "./AddressTable.jsx";
 import useCart from "../../store/hooks/UseCart";
+
+import profileService from "../../api/profile.service.js";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faShoppingBasket} from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +18,38 @@ const Cart = () => {
         return cart.length === 0;
     }, [cart.length]);
 
+    const [addresses, setAddresses] = useState([]);
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
+    const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
+
+    useEffect(() => {
+        const loadAddresses = async () => {
+            try {
+                const response = await profileService.getProfile();
+
+                console.log(
+                    "PROFILE RESPONSE:",
+                    response.data
+                );
+
+                setAddresses(
+                    response.data?.addressList || []
+                );
+
+            } catch (error) {
+                console.error(
+                    "Failed to load addresses:",
+                    error
+                );
+
+            } finally {
+                setIsLoadingAddresses(false);
+            }
+        };
+
+        loadAddresses();
+    }, []);
+
     return (
         <div className="max-w-5xl mx-auto px-6 py-14">
 
@@ -24,7 +59,26 @@ const Cart = () => {
                 !isCartEmpty ? (
 
                     <>
+                        {/* Products */}
+
                         <CartTable/>
+
+
+                        {/* Shipping Address */}
+
+                        <div className="mt-8">
+
+                            <AddressTable
+                                addresses={addresses}
+                                selectedAddressId={selectedAddressId}
+                                onAddressChange={setSelectedAddressId}
+                                isLoading={isLoadingAddresses}
+                            />
+
+                        </div>
+
+
+                        {/* Actions */}
 
                         <div className="flex justify-between mt-8">
 
@@ -46,21 +100,28 @@ const Cart = () => {
                                 Back To Products
                             </Link>
 
+
                             <Link
                                 to="/checkout"
+                                state={{
+                                    selectedAddressId
+                                }}
                                 className="
-                                        px-6
-                                        py-3
-                                        rounded-xl
-                                        bg-primary
-                                        text-white
-                                        font-semibold
-                                        hover:opacity-90
-                                        transition">
+                                    px-6
+                                    py-3
+                                    rounded-xl
+                                    bg-primary
+                                    text-white
+                                    font-semibold
+                                    hover:opacity-90
+                                    transition
+                                "
+                            >
                                 Proceed To Checkout
                             </Link>
 
                         </div>
+
                     </>
 
                 ) : (
@@ -79,6 +140,7 @@ const Cart = () => {
                             text-center
                         "
                     >
+
                         <div
                             className="
                                 w-28
@@ -101,6 +163,7 @@ const Cart = () => {
                             />
                         </div>
 
+
                         <h2
                             className="
                                 text-3xl
@@ -112,6 +175,7 @@ const Cart = () => {
                         >
                             Oops! Your Cart is Empty
                         </h2>
+
 
                         <p
                             className="
@@ -127,6 +191,7 @@ const Cart = () => {
                             products yet. Explore our collection and
                             discover skincare essentials you'll love.
                         </p>
+
 
                         <Link
                             to="/"

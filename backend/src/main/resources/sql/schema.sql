@@ -66,6 +66,8 @@ CREATE TABLE IF NOT  EXISTS address (
 
                          country VARCHAR(100) NOT NULL,
 
+                        label VARCHAR(100) NOT NULL DEFAULT 'Home',
+
                          CONSTRAINT fk_address_customer
                              FOREIGN KEY(customer_id)
                                  REFERENCES users(customer_id)
