@@ -3,6 +3,7 @@ package com.example.beautyecommerce.service.impl;
 import com.example.beautyecommerce.dto.AddressDTO;
 import com.example.beautyecommerce.entity.Address;
 import com.example.beautyecommerce.entity.Customer;
+import com.example.beautyecommerce.exceptions.ResourceNotFoundException;
 import com.example.beautyecommerce.mapper.AddressMapper;
 import com.example.beautyecommerce.repository.AddressRepository;
 import com.example.beautyecommerce.service.AddressService;
@@ -69,5 +70,11 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.findByIdAndCustomer_CustomerId(id, customer.getCustomerId())
                 .ifPresent(addressRepository::delete);
 
+    }
+
+    @Override
+    public Address findByIdAndCustomerId(Long id, Long customerId) {
+        return addressRepository.findByIdAndCustomer_CustomerId(id, customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Selected address was not found"));
     }
 }

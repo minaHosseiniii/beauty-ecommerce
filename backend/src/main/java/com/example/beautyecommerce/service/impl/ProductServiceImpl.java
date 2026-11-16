@@ -2,6 +2,7 @@ package com.example.beautyecommerce.service.impl;
 
 import com.example.beautyecommerce.dto.ProductDTO;
 import com.example.beautyecommerce.entity.Product;
+import com.example.beautyecommerce.exceptions.ResourceNotFoundException;
 import com.example.beautyecommerce.mapper.ProductMapper;
 import com.example.beautyecommerce.repository.ProductRepository;
 import com.example.beautyecommerce.service.ProductService;
@@ -23,12 +24,13 @@ public class ProductServiceImpl implements ProductService {
         return productRepository
                 .findById(id)
                 .map(productMapper::toProductDTO)
-                .orElseThrow(() -> new RuntimeException("product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product Not Found"));
     }
 
     @Override
     public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("product not found"));
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product Not Found"));
     }
 
     @Override

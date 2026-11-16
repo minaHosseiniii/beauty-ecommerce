@@ -10,4 +10,5 @@ public interface AddressService {
     List<Address> findByCustomerId(Long customerId);
     void updateAddress(AddressDTO addressDTO);
     void deleteAddress(Long id);
+    Address findByIdAndCustomerId(Long id, Long customerId);
 }

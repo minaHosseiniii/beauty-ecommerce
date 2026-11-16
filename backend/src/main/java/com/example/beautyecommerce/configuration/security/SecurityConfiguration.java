@@ -37,8 +37,8 @@ public class SecurityConfiguration {
             request.requestMatchers(EndpointRequest.to(HealthEndpoint.class))
                     .permitAll();
 
-            request.requestMatchers("/api/v1/admin/**")
-                    .hasRole("ADMIN");
+           /* request.requestMatchers("/api/v1/admin/**")
+                    .hasRole("ADMIN");*/
 
             request.anyRequest().authenticated();
         });

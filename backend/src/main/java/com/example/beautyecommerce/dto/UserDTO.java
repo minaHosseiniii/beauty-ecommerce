@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -14,4 +15,5 @@ import java.util.Set;
 public class UserDTO {
     private String name;
     private Set<String> authorities;
+    private List<AddressDTO> addressList;
 }

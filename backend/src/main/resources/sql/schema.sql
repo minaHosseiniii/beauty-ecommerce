@@ -100,22 +100,29 @@ CREATE TABLE IF NOT EXISTS role_permission
 
 CREATE TABLE IF NOT EXISTS orders
 (
-    id             BIGINT AUTO_INCREMENT PRIMARY KEY,
-    customer_id    BIGINT         NOT NULL,
-    total_price    DECIMAL(10, 2) NOT NULL,
-    payment_id     VARCHAR(255)   NOT NULL,
-    payment_status VARCHAR(255)   NOT NULL,
+    id                    BIGINT AUTO_INCREMENT PRIMARY KEY,
+    customer_id           BIGINT         NOT NULL,
+    total_price           DECIMAL(10, 2) NOT NULL,
+    payment_id            VARCHAR(255)   NOT NULL,
+    payment_status        VARCHAR(255)   NOT NULL,
 
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    created_by     VARCHAR(255) NOT NULL,
-    updated_at     TIMESTAMP DEFAULT NULL,
-    updated_by     VARCHAR(255) DEFAULT NULL,
+    street       VARCHAR(150)   NOT NULL,
+    city         VARCHAR(100)   NOT NULL,
+    state        VARCHAR(100)   NOT NULL,
+    postal_code  VARCHAR(20)    NOT NULL,
+    country      VARCHAR(100)   NOT NULL,
+    label        VARCHAR(100)   NOT NULL,
+    order_status VARCHAR(50)    NOT NULL,
+
+    created_at            TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_by            VARCHAR(255) NOT NULL,
+    updated_at            TIMESTAMP DEFAULT NULL,
+    updated_by            VARCHAR(255) DEFAULT NULL,
 
     CONSTRAINT fk_order_customer
     FOREIGN KEY (customer_id)
     REFERENCES users(customer_id)
     );
-
 
 
 CREATE TABLE IF NOT EXISTS order_items

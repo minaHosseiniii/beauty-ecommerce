@@ -1,6 +1,7 @@
 package com.example.beautyecommerce.configuration.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
@@ -52,6 +53,13 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            } catch (ExpiredJwtException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("""
+                        {"message":"Token expired"}
+                        """);
+                return;
             } catch (Exception e) {
                 throw new BadCredentialsException("Invalid Jwt token");
             }

@@ -1,6 +1,7 @@
 package com.example.beautyecommerce.configuration;
 
 import com.example.beautyecommerce.dto.ErrorResponseDTO;
+import com.example.beautyecommerce.exceptions.ResourceNotFoundException;
 import com.example.beautyecommerce.exceptions.ValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,17 @@ public class GlobalExceptionHandler {
                 .validationErrors(ex.getErrors())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
+        ErrorResponseDTO response = ErrorResponseDTO.builder()
+                .errorCode(HttpStatus.NOT_FOUND)
+                .timestamp(Instant.now())
+                .apiPath(request.getRequestURI())
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
 

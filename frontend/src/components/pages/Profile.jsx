@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import {
     Form,
@@ -7,13 +7,21 @@ import {
     useNavigation
 } from "react-router-dom";
 
+import { AuthContext } from "../../store/contexts/AuthContext.js";
+
 const Profile = () => {
 
-    const initialProfileData = useLoaderData();
+    const { authState, updateUser } =
+        useContext(AuthContext);
 
-    const actionData = useActionData();
+    const initialProfileData =
+        useLoaderData();
 
-    const navigation = useNavigation();
+    const actionData =
+        useActionData();
+
+    const navigation =
+        useNavigation();
 
     const isSubmitting =
         navigation.state === "submitting";
@@ -31,13 +39,36 @@ const Profile = () => {
 
         if (actionData.success) {
 
-            setProfileData(actionData.profileData);
+            const updatedProfile =
+                actionData.profileData;
+
+            setProfileData(updatedProfile);
+
+            /*
+             * ProfileResponseDTO and UserDTO
+             * are not necessarily the same object.
+             *
+             * We only synchronize the fields
+             * that belong to the authenticated user.
+             */
+            const updatedUser = {
+                ...authState.user,
+
+                name: updatedProfile.name,
+
+                addressList:
+                    updatedProfile.addressList || []
+            };
+
+            updateUser(updatedUser);
 
             setErrors({});
 
         } else {
 
-            setErrors(actionData.errors || {});
+            setErrors(
+                actionData.errors || {}
+            );
 
         }
 
@@ -46,7 +77,8 @@ const Profile = () => {
 
     const handlePersonalChange = (e) => {
 
-        const { name, value } = e.target;
+        const { name, value } =
+            e.target;
 
         setProfileData(prev => ({
             ...prev,
@@ -56,9 +88,13 @@ const Profile = () => {
     };
 
 
-    const handleAddressChange = (index, e) => {
+    const handleAddressChange = (
+        index,
+        e
+    ) => {
 
-        const { name, value } = e.target;
+        const { name, value } =
+            e.target;
 
         setProfileData(prev => {
 
@@ -73,7 +109,8 @@ const Profile = () => {
 
             return {
                 ...prev,
-                addressList: updatedAddresses
+                addressList:
+                updatedAddresses
             };
 
         });
@@ -106,7 +143,9 @@ const Profile = () => {
     };
 
 
-    const handleRemoveAddress = (index) => {
+    const handleRemoveAddress = (
+        index
+    ) => {
 
         setProfileData(prev => {
 
@@ -114,11 +153,15 @@ const Profile = () => {
                 ...(prev.addressList || [])
             ];
 
-            updatedAddresses.splice(index, 1);
+            updatedAddresses.splice(
+                index,
+                1
+            );
 
             return {
                 ...prev,
-                addressList: updatedAddresses
+                addressList:
+                updatedAddresses
             };
 
         });
@@ -127,17 +170,17 @@ const Profile = () => {
 
 
     const inputClass = `
-w-full
-rounded-xl
-border
-border-stone-300
-dark:border-[#2B3328]
-bg-white
-dark:bg-[#1F241D]
-px-4
-py-3
-outline-none
-focus:border-primary
+        w-full
+        rounded-xl
+        border
+        border-stone-300
+        dark:border-[#2B3328]
+        bg-white
+        dark:bg-[#1F241D]
+        px-4
+        py-3
+        outline-none
+        focus:border-primary
     `;
 
 
@@ -147,7 +190,14 @@ focus:border-primary
 
     return (
 
-        <div className="max-w-4xl mx-auto py-10 px-6">
+        <div
+            className="
+                max-w-4xl
+                mx-auto
+                py-10
+                px-6
+            "
+        >
 
             <h1
                 className="
@@ -163,9 +213,9 @@ focus:border-primary
             <Form method="put">
 
                 {/*
-                    ProfileRequestDTO expects "addresses".
-                    The response uses "addressList".
-                */}
+                 * ProfileRequestDTO expects "addresses".
+                 * ProfileResponseDTO uses "addressList".
+                 */}
                 <input
                     type="hidden"
                     name="addresses"
@@ -201,11 +251,19 @@ focus:border-primary
                         </h2>
 
 
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div
+                            className="
+                                grid
+                                md:grid-cols-2
+                                gap-6
+                            "
+                        >
 
                             <div>
 
-                                <label>Name</label>
+                                <label>
+                                    Name
+                                </label>
 
                                 <input
                                     type="text"
@@ -213,22 +271,34 @@ focus:border-primary
                                     value={
                                         profileData.name || ""
                                     }
-                                    onChange={handlePersonalChange}
-                                    className={inputClass}
+                                    onChange={
+                                        handlePersonalChange
+                                    }
+                                    className={
+                                        inputClass
+                                    }
                                 />
 
-                                {errors.name &&
-                                    <p className={errorClass}>
+                                {errors.name && (
+
+                                    <p
+                                        className={
+                                            errorClass
+                                        }
+                                    >
                                         {errors.name}
                                     </p>
-                                }
+
+                                )}
 
                             </div>
 
 
                             <div>
 
-                                <label>Email</label>
+                                <label>
+                                    Email
+                                </label>
 
                                 <input
                                     type="email"
@@ -236,22 +306,34 @@ focus:border-primary
                                     value={
                                         profileData.email || ""
                                     }
-                                    onChange={handlePersonalChange}
-                                    className={inputClass}
+                                    onChange={
+                                        handlePersonalChange
+                                    }
+                                    className={
+                                        inputClass
+                                    }
                                 />
 
-                                {errors.email &&
-                                    <p className={errorClass}>
+                                {errors.email && (
+
+                                    <p
+                                        className={
+                                            errorClass
+                                        }
+                                    >
                                         {errors.email}
                                     </p>
-                                }
+
+                                )}
 
                             </div>
 
 
                             <div>
 
-                                <label>Mobile Number</label>
+                                <label>
+                                    Mobile Number
+                                </label>
 
                                 <input
                                     type="text"
@@ -259,15 +341,25 @@ focus:border-primary
                                     value={
                                         profileData.mobileNumber || ""
                                     }
-                                    onChange={handlePersonalChange}
-                                    className={inputClass}
+                                    onChange={
+                                        handlePersonalChange
+                                    }
+                                    className={
+                                        inputClass
+                                    }
                                 />
 
-                                {errors.mobileNumber &&
-                                    <p className={errorClass}>
+                                {errors.mobileNumber && (
+
+                                    <p
+                                        className={
+                                            errorClass
+                                        }
+                                    >
                                         {errors.mobileNumber}
                                     </p>
-                                }
+
+                                )}
 
                             </div>
 
@@ -301,7 +393,9 @@ focus:border-primary
 
                             <button
                                 type="button"
-                                onClick={handleAddAddress}
+                                onClick={
+                                    handleAddAddress
+                                }
                                 className="
                                     bg-primary
                                     text-white
@@ -317,7 +411,8 @@ focus:border-primary
                         </div>
 
 
-                        {(profileData.addressList || []).length === 0 && (
+                        {(profileData.addressList || [])
+                            .length === 0 && (
 
                             <div
                                 className="
@@ -334,12 +429,15 @@ focus:border-primary
                             >
 
                                 <p className="mb-4">
-                                    You don't have any addresses yet.
+                                    You don't have any
+                                    addresses yet.
                                 </p>
 
                                 <button
                                     type="button"
-                                    onClick={handleAddAddress}
+                                    onClick={
+                                        handleAddAddress
+                                    }
                                     className="
                                         bg-primary
                                         text-white
@@ -357,249 +455,290 @@ focus:border-primary
                         )}
 
 
-                        {(profileData.addressList || []).map(
-                            (address, index) => (
-
-                                <div
-                                    key={address.id ?? index}
-                                    className="
-                                        border
-                                        border-stone-200
-                                        dark:border-[#2B3328]
-                                        rounded-2xl
-                                        p-6
-                                        mb-6
-                                    "
-                                >
+                        {(profileData.addressList || [])
+                            .map(
+                                (address, index) => (
 
                                     <div
+                                        key={
+                                            address.id ??
+                                            index
+                                        }
                                         className="
-                                            flex
-                                            items-center
-                                            justify-between
-                                            mb-5
+                                            border
+                                            border-stone-200
+                                            dark:border-[#2B3328]
+                                            rounded-2xl
+                                            p-6
+                                            mb-6
                                         "
                                     >
 
-                                        <h3
+                                        <div
                                             className="
-                                                font-semibold
+                                                flex
+                                                items-center
+                                                justify-between
+                                                mb-5
                                             "
                                         >
-                                            Address {index + 1}
-                                        </h3>
+
+                                            <h3
+                                                className="
+                                                    font-semibold
+                                                "
+                                            >
+                                                Address{" "}
+                                                {index + 1}
+                                            </h3>
 
 
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                handleRemoveAddress(index)
-                                            }
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleRemoveAddress(
+                                                        index
+                                                    )
+                                                }
+                                                className="
+                                                    text-red-500
+                                                    text-sm
+                                                    hover:underline
+                                                "
+                                            >
+                                                Remove
+                                            </button>
+
+                                        </div>
+
+
+                                        <div
                                             className="
-                                                text-red-500
-                                                text-sm
-                                                hover:underline
+                                                grid
+                                                md:grid-cols-2
+                                                gap-6
                                             "
                                         >
-                                            Remove
-                                        </button>
+
+                                            {/* Label */}
+
+                                            <div>
+
+                                                <label>
+                                                    Label{" "}
+                                                    <span className="text-red-500">
+                                                        *
+                                                    </span>
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    name="label"
+                                                    value={
+                                                        address.label ||
+                                                        ""
+                                                    }
+                                                    onChange={(
+                                                        e
+                                                    ) =>
+                                                        handleAddressChange(
+                                                            index,
+                                                            e
+                                                        )
+                                                    }
+                                                    required
+                                                    className={
+                                                        inputClass
+                                                    }
+                                                />
+
+                                            </div>
+
+
+                                            {/* Street */}
+
+                                            <div>
+
+                                                <label>
+                                                    Street{" "}
+                                                    <span className="text-red-500">
+                                                        *
+                                                    </span>
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    name="street"
+                                                    value={
+                                                        address.street ||
+                                                        ""
+                                                    }
+                                                    onChange={(
+                                                        e
+                                                    ) =>
+                                                        handleAddressChange(
+                                                            index,
+                                                            e
+                                                        )
+                                                    }
+                                                    required
+                                                    className={
+                                                        inputClass
+                                                    }
+                                                />
+
+                                            </div>
+
+
+                                            {/* City */}
+
+                                            <div>
+
+                                                <label>
+                                                    City{" "}
+                                                    <span className="text-red-500">
+                                                        *
+                                                    </span>
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    name="city"
+                                                    value={
+                                                        address.city ||
+                                                        ""
+                                                    }
+                                                    onChange={(
+                                                        e
+                                                    ) =>
+                                                        handleAddressChange(
+                                                            index,
+                                                            e
+                                                        )
+                                                    }
+                                                    required
+                                                    className={
+                                                        inputClass
+                                                    }
+                                                />
+
+                                            </div>
+
+
+                                            {/* State */}
+
+                                            <div>
+
+                                                <label>
+                                                    State{" "}
+                                                    <span className="text-red-500">
+                                                        *
+                                                    </span>
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    name="state"
+                                                    value={
+                                                        address.state ||
+                                                        ""
+                                                    }
+                                                    onChange={(
+                                                        e
+                                                    ) =>
+                                                        handleAddressChange(
+                                                            index,
+                                                            e
+                                                        )
+                                                    }
+                                                    required
+                                                    className={
+                                                        inputClass
+                                                    }
+                                                />
+
+                                            </div>
+
+
+                                            {/* Postal Code */}
+
+                                            <div>
+
+                                                <label>
+                                                    Postal Code{" "}
+                                                    <span className="text-red-500">
+                                                        *
+                                                    </span>
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    name="postalCode"
+                                                    value={
+                                                        address.postalCode ||
+                                                        ""
+                                                    }
+                                                    onChange={(
+                                                        e
+                                                    ) =>
+                                                        handleAddressChange(
+                                                            index,
+                                                            e
+                                                        )
+                                                    }
+                                                    required
+                                                    className={
+                                                        inputClass
+                                                    }
+                                                />
+
+                                            </div>
+
+
+                                            {/* Country */}
+
+                                            <div
+                                                className="
+                                                    md:col-span-2
+                                                "
+                                            >
+
+                                                <label>
+                                                    Country{" "}
+                                                    <span className="text-red-500">
+                                                        *
+                                                    </span>
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    name="country"
+                                                    value={
+                                                        address.country ||
+                                                        ""
+                                                    }
+                                                    onChange={(
+                                                        e
+                                                    ) =>
+                                                        handleAddressChange(
+                                                            index,
+                                                            e
+                                                        )
+                                                    }
+                                                    required
+                                                    className={
+                                                        inputClass
+                                                    }
+                                                />
+
+                                            </div>
+
+                                        </div>
 
                                     </div>
 
-
-                                    <div
-                                        className="
-                                            grid
-                                            md:grid-cols-2
-                                            gap-6
-                                        "
-                                    >
-
-                                        {/* Label */}
-
-                                        <div>
-
-                                            <label>
-                                                Label{" "}
-                                                <span className="text-red-500">
-                                                    *
-                                                </span>
-                                            </label>
-
-                                            <input
-                                                type="text"
-                                                name="label"
-                                                value={
-                                                    address.label || ""
-                                                }
-                                                onChange={(e) =>
-                                                    handleAddressChange(
-                                                        index,
-                                                        e
-                                                    )
-                                                }
-                                                required
-                                                className={inputClass}
-                                            />
-
-                                        </div>
-
-
-                                        {/* Street */}
-
-                                        <div>
-
-                                            <label>
-                                                Street{" "}
-                                                <span className="text-red-500">
-                                                    *
-                                                </span>
-                                            </label>
-
-                                            <input
-                                                type="text"
-                                                name="street"
-                                                value={
-                                                    address.street || ""
-                                                }
-                                                onChange={(e) =>
-                                                    handleAddressChange(
-                                                        index,
-                                                        e
-                                                    )
-                                                }
-                                                required
-                                                className={inputClass}
-                                            />
-
-                                        </div>
-
-
-                                        {/* City */}
-
-                                        <div>
-
-                                            <label>
-                                                City{" "}
-                                                <span className="text-red-500">
-                                                    *
-                                                </span>
-                                            </label>
-
-                                            <input
-                                                type="text"
-                                                name="city"
-                                                value={
-                                                    address.city || ""
-                                                }
-                                                onChange={(e) =>
-                                                    handleAddressChange(
-                                                        index,
-                                                        e
-                                                    )
-                                                }
-                                                required
-                                                className={inputClass}
-                                            />
-
-                                        </div>
-
-
-                                        {/* State */}
-
-                                        <div>
-
-                                            <label>
-                                                State{" "}
-                                                <span className="text-red-500">
-                                                    *
-                                                </span>
-                                            </label>
-
-                                            <input
-                                                type="text"
-                                                name="state"
-                                                value={
-                                                    address.state || ""
-                                                }
-                                                onChange={(e) =>
-                                                    handleAddressChange(
-                                                        index,
-                                                        e
-                                                    )
-                                                }
-                                                required
-                                                className={inputClass}
-                                            />
-
-                                        </div>
-
-
-                                        {/* Postal Code */}
-
-                                        <div>
-
-                                            <label>
-                                                Postal Code{" "}
-                                                <span className="text-red-500">
-                                                    *
-                                                </span>
-                                            </label>
-
-                                            <input
-                                                type="text"
-                                                name="postalCode"
-                                                value={
-                                                    address.postalCode || ""
-                                                }
-                                                onChange={(e) =>
-                                                    handleAddressChange(
-                                                        index,
-                                                        e
-                                                    )
-                                                }
-                                                required
-                                                className={inputClass}
-                                            />
-
-                                        </div>
-
-
-                                        {/* Country */}
-
-                                        <div className="md:col-span-2">
-
-                                            <label>
-                                                Country{" "}
-                                                <span className="text-red-500">
-                                                    *
-                                                </span>
-                                            </label>
-
-                                            <input
-                                                type="text"
-                                                name="country"
-                                                value={
-                                                    address.country || ""
-                                                }
-                                                onChange={(e) =>
-                                                    handleAddressChange(
-                                                        index,
-                                                        e
-                                                    )
-                                                }
-                                                required
-                                                className={inputClass}
-                                            />
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            )
-                        )}
+                                )
+                            )}
 
                     </section>
 

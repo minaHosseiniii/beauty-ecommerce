@@ -1,4 +1,4 @@
-import {LOGIN_SUCCESS, LOGOUT} from "../actions/AuthActionTypes.js";
+import {LOGIN_SUCCESS, LOGOUT, UPDATE_USER} from "../actions/AuthActionTypes.js";
 
 export function authReducer(state,action) {
     console.log(action.type);
@@ -17,6 +17,12 @@ export function authReducer(state,action) {
                 token: null,
                 user: null,
                 isAuthenticated: false
+            };
+
+        case UPDATE_USER:
+            return {
+                ...state,
+                user: action.payload
             };
         default:
             return state;

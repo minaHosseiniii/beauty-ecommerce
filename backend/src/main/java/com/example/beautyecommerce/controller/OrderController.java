@@ -1,6 +1,7 @@
 package com.example.beautyecommerce.controller;
 
 import com.example.beautyecommerce.dto.OrderDTO;
+import com.example.beautyecommerce.dto.OrderResponseDTO;
 import com.example.beautyecommerce.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -25,5 +28,10 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDTO>> findCustomerOrders() {
+        return ResponseEntity.ok(orderService.findCustomerOrders());
     }
 }

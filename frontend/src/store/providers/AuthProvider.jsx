@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { AuthContext } from "../contexts/AuthContext.js";
 import { authReducer } from "../reducers/authReducer.js";
-import { LOGIN_SUCCESS, LOGOUT } from "../actions/AuthActionTypes.js";
+import {LOGIN_SUCCESS, LOGOUT, UPDATE_USER} from "../actions/AuthActionTypes.js";
 
 const initialAuthState = {
     token: sessionStorage.getItem("token"),
@@ -41,11 +41,25 @@ const AuthProvider = ({ children }) => {
         });
     };
 
+    const updateUser = (user) => {
+
+        localStorage.setItem(
+            "user",
+            JSON.stringify(user)
+        );
+
+        dispatch({
+            type: UPDATE_USER,
+            payload: user
+        });
+    };
+
     return (
         <AuthContext.Provider
             value={{
                 authState,
                 loginSuccess,
+                updateUser,
                 logout
             }}
         >

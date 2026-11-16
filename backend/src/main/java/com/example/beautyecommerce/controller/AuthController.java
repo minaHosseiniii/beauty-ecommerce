@@ -3,6 +3,7 @@ package com.example.beautyecommerce.controller;
 import com.example.beautyecommerce.configuration.security.JwtService;
 import com.example.beautyecommerce.dto.*;
 import com.example.beautyecommerce.entity.Customer;
+import com.example.beautyecommerce.mapper.AddressMapper;
 import com.example.beautyecommerce.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @Validated
 @RequiredArgsConstructor
 public class AuthController {
+    private final AddressMapper addressMapper;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final CustomerService customerService;
@@ -48,6 +51,8 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
         user.setAuthorities(authorities);
+        List<AddressDTO> addressDTOS = customer.getAddresses().stream().map(addressMapper::toAddressDTO).toList();
+        user.setAddressList(addressDTOS);
 
         return ResponseEntity.ok(new LoginResponseDTO(token, "login successful", user));
     }

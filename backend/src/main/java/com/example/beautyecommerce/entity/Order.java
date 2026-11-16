@@ -35,10 +35,15 @@ public class Order extends BaseEntity {
     @Column(nullable = false)
     private String paymentStatus;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<OrderItem> items = new ArrayList<>();
+    @Embedded
+    private ShippingAddress shippingAddress;
 }

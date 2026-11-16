@@ -1,6 +1,7 @@
 package com.example.beautyecommerce.service.impl;
 
 import com.example.beautyecommerce.entity.Role;
+import com.example.beautyecommerce.exceptions.ResourceNotFoundException;
 import com.example.beautyecommerce.repository.RoleRepository;
 import com.example.beautyecommerce.service.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,6 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findByRoleName(String roleName) {
         return roleRepository.findByRoleName(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found : " + roleName));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found : " + roleName));
     }
 }

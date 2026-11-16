@@ -1,5 +1,6 @@
 package com.example.beautyecommerce.dto;
 
+import com.example.beautyecommerce.entity.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,8 @@ public class OrderDTO {
     private String paymentId;
     private String paymentStatus;
     private Instant createdAt;
+    private OrderStatus orderStatus;
     private List<OrderItemDTO> items;
+    private Long selectedAddressId;
+    private AddressDTO shippingAddress;
 }

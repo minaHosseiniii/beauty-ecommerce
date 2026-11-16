@@ -1,6 +1,7 @@
 package com.example.beautyecommerce.mapper;
 
 import com.example.beautyecommerce.dto.OrderItemDTO;
+import com.example.beautyecommerce.dto.OrderItemResponseDTO;
 import com.example.beautyecommerce.entity.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

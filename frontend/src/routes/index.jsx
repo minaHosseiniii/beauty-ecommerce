@@ -19,6 +19,8 @@ import Profile from "../components/pages/Profile.jsx";
 import {profileAction} from "../action/profile.action.js";
 import Checkout from "../components/pages/checkout/Checkout.jsx";
 import OrderSuccess from "../components/pages/checkout/OrderSuccess.jsx";
+import OrderHistory from "../components/pages/OrderHistory.jsx";
+import AdminOrders from "../components/pages/admin/AdminOrders.jsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -39,6 +41,8 @@ export const router = createBrowserRouter(
             <Route path="profile" element={<Profile/>} loader={profileLoader} action={profileAction}/>
             <Route path="checkout" element={<Checkout/>} />
             <Route path="order-success" element={<OrderSuccess/>} />
+            <Route path="orders" element={<OrderHistory/>}/>
+            <Route path="admin/orders" element={<AdminOrders/>}/>
         </Route>
     )
 );
